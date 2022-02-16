@@ -1,0 +1,22 @@
+body {
+    text-align: left;
+    padding: 30px;
+}
+
+#footer {
+    position: fixed;
+    left: 0; bottom: 0;
+    padding: 20px;
+    background: #ff0000;
+    color: #fff;
+    width: 100%;
+}
+
+#header {
+    position: fixed;
+    left: 0; top: 0;
+    padding: 30px;
+    background: #ff0000;
+    color: #fff;
+    width: 100%;
+}
