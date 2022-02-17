@@ -10,9 +10,7 @@ class Post(models.Model):
     paragraph = models.TextField(blank = True, null = True)
 
     
-
 class PostImage(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
     image = models.ImageField(null = True, blank = True, upload_to = "images/")
-    
     
