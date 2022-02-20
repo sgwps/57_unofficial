@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 '''
@@ -34,6 +36,21 @@ class OurUser(models.Model):
     Class = models.ForeignKey(to=Class, on_delete=models.SET_NULL(), related_name='Class')
     mediaPost = models.IntegerField()
     city = models.IntegerField()
+
+# Magic from Habr section
+
+@receiver(post_save, sender=User)
+def create_user_(sender, instance, created, **kwargs):
+    if created:
+        OurUser.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+
+
 
 
 class Position(models.Model):
