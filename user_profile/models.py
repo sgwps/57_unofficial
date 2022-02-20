@@ -37,7 +37,7 @@ class OurUser(models.Model):
     mediaPost = models.IntegerField()
     city = models.IntegerField()
 
-# Magic from Habr section
+# Magic from Habr section link for original topic: https://habr.com/ru/post/313764/
 
 @receiver(post_save, sender=User)
 def create_user_(sender, instance, created, **kwargs):
