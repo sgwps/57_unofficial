@@ -24,7 +24,7 @@ class Specialization(models.Model):
 class Class(models.Model):
     ID = models.IntegerField()
     GraduationYear = models.IntegerField()
-    Specialization = models.ForeignKey(to=Specialization, on_delete=models.SET_NULL(), related_name='Specializations')
+    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT(), related_name='Specializations')
     Letter = models.CharField(max_length=1)
 
 
