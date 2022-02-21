@@ -4,27 +4,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 # Create your models here.
-
 class Position(models.Model):
-    ID = models.IntegerField()
     Name = models.CharField(max_length=30)
 
 
 class Subject(models.Model):
-    ID = models.IntegerField()
     Name = models.CharField(max_length=30)
 
 
 class Specialization(models.Model):
     # Specialization
-    ID = models.IntegerField()
     Name = models.CharField(max_length=30)
 
 
-class Class(models.Model):
-    ID = models.IntegerField()
+class Grade(models.Model):
     GraduationYear = models.IntegerField()
-    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT(), related_name='Specializations')
+    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='Specializations')
     Letter = models.CharField(max_length=1)
 
 
@@ -34,14 +29,14 @@ class Profile(models.Model):
         ('f', 'female'),
         ('n', 'neutral')
     )
-    UserID = models.OneToOneField(User, on_delete=models.CASCADE)
+    User_main = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     Gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     isConfirmed = models.BooleanField()
-    BIO = models.CharField()
+    BIO = models.CharField(max_length=570)
     Birthday = models.DateField(blank=True)
-    Position = models.ForeignKey(to=Position, on_delete=models.PROTECT(), related_name='Position')
-    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT(), related_name='Subject')
-    Class = models.ForeignKey(to=Class, on_delete=models.PROTECT(), related_name='Class')
+    Position = models.ForeignKey(to=Position, on_delete=models.PROTECT, related_name='Position')
+    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT, related_name='Subject')
+    Class = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='Class')
     mediaPost = models.IntegerField()
     city = models.IntegerField()
 
@@ -57,9 +52,4 @@ def create_user_(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_(sender, instance, **kwargs):
     instance.profile.save()
-
-
-
-
-
 
