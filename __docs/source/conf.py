@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = '57_unofficial'
-copyright = '2022, Gregory "sgwps" Borisenko'
-author = 'Gregory "sgwps" Borisenko'
+copyright = '2022, Grigory "sgwps" Borisenko'
+author = 'Grigory "sgwps" Borisenko'
 
 
 # -- General configuration ---------------------------------------------------
