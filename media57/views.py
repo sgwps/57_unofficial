@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-def news_list(request):
+def main_page(request):
     raise NotImplementedError
 
 
-def view_article(request):
+def creator_page(request):
     raise NotImplementedError
