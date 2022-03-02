@@ -9,7 +9,30 @@ def creation(request):
     if request.method == 'POST':
         f = NewsCreationForm(request.POST)
         if f.is_valid:
-            # Формируем json
+            
+            """
+            Создаем json
+            
+            {
+                "1":{
+                    "text": "lorem ipsum",
+                    "img": "images/fayer_1"
+                }, //изображение с подписью внизу
+                "2":{
+                    "img": "images/fayer_2"
+                }, //изображение без подписи
+                "3":{
+                    "text": "lorem ipsum" 
+                }, //параграф текста
+                "4":{
+                    "text": "normal <b>bold text</b>"
+                },
+                "5":{
+                    "text": "normal <i>italic text</i>"
+                }
+            }
+            """
+            
             pass
         else:
             form_valid = False

@@ -1,5 +1,3 @@
-import imp
-from typing import Any
 from django import forms
 
 class NewsCreationForm(forms.Form):
