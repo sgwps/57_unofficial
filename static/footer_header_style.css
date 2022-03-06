@@ -1,0 +1,24 @@
+body {
+    padding: 100px;
+}
+
+#footer {
+    position: fixed;
+    left: 0; bottom: 0;
+    padding: 20px;
+    background: #e62222;
+    color: #fff;
+    width: 100%;
+    z-index: 1;
+}
+
+#header {
+    position: fixed;
+    left: 0; top: 0;
+    padding: 30px;
+    background: #e62222;
+    color: #fff;
+    width: 100%;
+    z-index: 1;
+}
+
