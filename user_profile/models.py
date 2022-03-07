@@ -42,6 +42,17 @@ class Profile(models.Model):
     Birthday = models.DateField(blank=True)
     city = models.IntegerField()
 
+    @classmethod
+    def create(cls, attrs):
+        '''''''
+        if attrs.is_teacher:
+
+        if attrs.is_student:
+
+@receiver(post_save, sender)
+def save_user_
+
+
 # Magic from Habr section link for original topic: https://habr.com/ru/post/313764/
 # разбить на классы по Positions???
 
@@ -64,7 +75,7 @@ class Teacher(models.Model):
 
 
 class Student(models.Model):
-    ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    ProfileID = models.OnesaveoOneField(Profile, on_delete=models.CASCADE)
     Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT(), related_name='Class')
 
 
