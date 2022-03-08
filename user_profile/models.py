@@ -40,9 +40,9 @@ class Profile(models.Model):
     UserID = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     Gender = models.CharField(max_length=1, choices=GENDERS)
     isConfirmed = models.BooleanField()
-    BIO = models.CharField()
+    BIO = models.CharField(blank=True)
     Birthday = models.DateField(blank=True)
-    city = models.IntegerField()
+    city = models.IntegerField(blank=True)
 '''
     @classmethod
     def create(cls, attrs):
@@ -66,13 +66,13 @@ def create_user_(sender, instance, created, **kwargs):
 '''
 class Teacher(models.Model):
     ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
-    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT(), related_name='Subject')  #many to many - remake
+    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT(), related_name='Subject', blank=True)  #many to many - remake
     working_currently = models.BooleanField()
 
 
 class Student(models.Model):
     ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT(), related_name='Class')
+    Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT(), related_name='Class', blank=True)
 
 
 class Manager(models.Model):
@@ -112,7 +112,7 @@ class UserAdapter:
         profile = User.profile
         gender = data.get("gender", "n")
         is_teacher = data.get("is_teacher", False)
-        is_student = data.get("is_teacher", False)
+        is_student = data.get("is_student", False)
         birthday = data.get("bday", None)
         profile.Gender = gender
         profile.is_teacher = is_teacher
