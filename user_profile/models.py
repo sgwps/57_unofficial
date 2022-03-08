@@ -77,7 +77,7 @@ class Student(models.Model):
 
 class Manager(models.Model):
     ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    post = models.CharField(max_length=50)
+    post = models.CharField(max_length=50, blank=True)
     working_currently = models.BooleanField()
 
 
