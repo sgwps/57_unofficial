@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="post" to="/" >
+         {% csrf_token %}
+        <input type=email name="email">
+        <input type="password" name="password">
+        <input type="text" name="first_name">
+        <input type="text" name="last_name">
+        <input type="text" name="username">
+        <form>
+              <input type="radio" id="html" name="gender" value="m">
+              <label for="html">male</label><br>
+              <input type="radio" id="css" name="gender" value="f">
+              <label for="css">female</label><br>
+              <input type="radio" id="javascript" name="gender" value="n">
+              <label for="javascript">neut</label>
+        </form>
+        <input type="date" name="bday">
+        <input type="checkbox" name="is_teacher">
+        <input type="checkbox" name="is_student">
+
+    </form>
+
+</body>
+</html>

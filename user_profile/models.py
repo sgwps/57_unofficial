@@ -23,7 +23,7 @@ class Specialization(models.Model):
 
 class Grade(models.Model):
     GraduationYear = models.IntegerField()
-    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT(), related_name='Class')
+    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='Class')
     Letter = models.CharField(max_length=1)
 
 
@@ -40,7 +40,7 @@ class Profile(models.Model):
     UserID = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     Gender = models.CharField(max_length=1, choices=GENDERS)
     isConfirmed = models.BooleanField()
-    BIO = models.CharField(blank=True)
+    BIO = models.CharField(blank=True, max_length=500)
     Birthday = models.DateField(blank=True)
     city = models.IntegerField(blank=True)
 '''
@@ -66,13 +66,13 @@ def create_user_(sender, instance, created, **kwargs):
 '''
 class Teacher(models.Model):
     ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
-    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT(), related_name='Subject', blank=True)  #many to many - remake
+    Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT, related_name='Subject', blank=True)  #many to many - remake
     working_currently = models.BooleanField()
 
 
 class Student(models.Model):
     ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT(), related_name='Class', blank=True)
+    Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='Class', blank=True)
 
 
 class Manager(models.Model):
