@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+     <link rel="shortcut icon" href="#">
+
 </head>
-<body>
+<body onload="load()">
     <form action="post" to="/" >
          {% csrf_token %}
         <input type=email name="email">
@@ -21,10 +23,44 @@
               <label for="javascript">neut</label>
         </form>
         <input type="date" name="bday">
-        <input type="checkbox" name="is_teacher">
-        <input type="checkbox" name="is_student">
+        <div ><input type="checkbox" id="is_teacher"  onclick="is_teacher()" name="is_teacher"  ></div>
+        <div id="teacher_sign_up">
+            <input type="text" name="subject">
+        </div>
+        <div > <input type="checkbox" id="is_student" onclick="is_student()" name="is_student" ></div>
+        <div id="student_sign_up">
+            <input type="text" name="class">
+        </div>
 
     </form>
+    <script>
+        function load() {
+            console.log("2")
+            document.getElementById("teacher_sign_up").style.display = "none";
+            document.getElementById("student_sign_up").style.display = "none";
+        };
 
+        function is_teacher(){
+            console.log("1")
+             var chk = document.getElementById("is_teacher");
+             if (chk.checked){
+                            console.log("3")
+                document.getElementById("teacher_sign_up").style.display = "";
+             }
+             else{
+                                         console.log("4")
+                 document.getElementById("teacher_sign_up").style.display = "none";
+             }
+        }
+        function is_student(){
+             var chk = document.getElementById("is_student");
+             if (chk.checked){
+                document.getElementById("student_sign_up").style.display = "";
+             }
+             else{
+                 document.getElementById("student_sign_up").style.display = "none";
+             }
+        }
+    </script>
 </body>
 </html>

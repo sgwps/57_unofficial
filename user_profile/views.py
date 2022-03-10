@@ -25,3 +25,7 @@ def update_profile(request):
         'profile_form': profile_form
     })
 """
+
+
+def sign_up(request):
+    return render(request, 'registration.html')
