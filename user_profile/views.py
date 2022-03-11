@@ -28,4 +28,6 @@ def update_profile(request):
 
 
 def sign_up(request):
+    if request.method == 'POST':
+        print(1111)
     return render(request, 'registration.html')
