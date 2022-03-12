@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.views import View
 
 """
 In case of OurUser problems modify this not stolen code:
@@ -31,3 +32,13 @@ def sign_up(request):
     if request.method == 'POST':
         print(1111)
     return render(request, 'registration.html')
+
+
+def su2(request):
+    return render(request, "reg2.html")
+
+class Index(View):
+    template_name = 'registration.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, Index.template_name, {'email': request.GET.get('email')})
