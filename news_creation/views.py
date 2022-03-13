@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from news_creation.forms import NewsCreationForm
-
+from .forms import QuillFieldForm
 # Create your views here.
 
 def creation(request):
@@ -45,3 +45,7 @@ def creation(request):
     }
     
     return render(request, 'news_creation.html', context = ctx)
+
+
+def form_view(request):
+    return render(request, 'Quill.html', {'form': QuillFieldForm()})

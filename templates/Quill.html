@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{ form.media }}
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="" method="POST">{% csrf_token %}
+    {{ form.content }}
+</form>
+</body>
+</html>
