@@ -1,6 +1,8 @@
+import json
+
 from django.http import JsonResponse
 from django.shortcuts import render
-
+from . import models
 # Create your views here.
 from django.views import View
 from . import forms
@@ -37,6 +39,9 @@ def sign_up(request):
 
 
 def su2(request):
+    with open('user_profile/test.json') as json_file:
+        data = json.load(json_file)
+        models.Profile.create(data)
     return render(request, "reg2.html")
 
 class Index(View):
