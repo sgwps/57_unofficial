@@ -1,7 +1,9 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
 from django.views import View
+from . import forms
 
 """
 In case of OurUser problems modify this not stolen code:
@@ -42,3 +44,31 @@ class Index(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, Index.template_name, {'email': request.GET.get('email')})
+
+
+class UserRegistration(View):
+    general_reg_form = forms.RegistrationForm
+    student_reg_form = forms.StudentRegistrationForm
+    teacher_reg_form = forms.TeacherRegistrationForm
+    context = {
+        'general_reg_form': general_reg_form(),
+        'student_reg_form': student_reg_form(),
+        'teacher_reg_form': teacher_reg_form()
+    }
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'reg3.html', context=UserRegistration.context)
+
+    def post(self, request, *args, **kwargs):
+        general_form = UserRegistration.general_reg_form(request.POST)
+        student_form = UserRegistration.student_reg_form(request.POST)
+        teacher_form = UserRegistration.teacher_reg_form(request.POST)
+        if general_form.is_valid():
+            result = general_form.cleaned_data
+            if student_form.is_valid():
+                result = {**result, **student_form.cleaned_data}
+            if teacher_form.is_valid():
+                result = {**result, **teacher_form.cleaned_data}
+            return JsonResponse(result)
+        else:
+            return render(request, 'reg3.html', context=UserRegistration.context)
