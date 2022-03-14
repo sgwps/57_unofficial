@@ -6,10 +6,8 @@ from django.dispatch import receiver
 # Create your models here.
 
 
-
-
 class Subject(models.Model):
-    Name = models.CharField(max_length=30)
+    Name = models.CharField(max_length=40)
 
 
 class MediaPost(models.Model):
@@ -37,12 +35,41 @@ class Profile(models.Model):
     is_student = models.BooleanField()
     is_manager = models.BooleanField()
     is_mediaStaff = models.BooleanField()
-    UserID = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    User = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     Gender = models.CharField(max_length=1, choices=GENDERS)
     isConfirmed = models.BooleanField()
     BIO = models.CharField(blank=True, max_length=500)
     Birthday = models.DateField(blank=True)
     city = models.IntegerField(blank=True)
+
+
+    @staticmethod
+    def create(data):  #data - json or dict??
+        email = data["email"]
+        password = data["password"]
+        first_name = data["first_name"]
+        last_name = data["last_name"]
+        username = data.get("username", "")
+        user = User(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
+        user.save()
+        profile = Profile
+        profile.User = user
+        profile.Gender = data.get("gender", "n")
+        profile.is_teacher = data.get("is_teacher", False)
+        profile.is_student = data.get("is_student", False)
+        profile.Birthday = data.get("bday", None)
+        profile.save()
+        if profile.is_student:
+            Student.create(data.get("student", dict()), profile)
+        if profile.is_teacher:
+            Teacher.create(data.get("teacher", dict()), profile)
+
+
+@receiver(post_save, sender=User)
+def create_user_(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
 '''
     @classmethod
     def create(cls, attrs):
@@ -59,15 +86,18 @@ def save_user_
 # разбить на классы по Positions???
 
 
-@receiver(post_save, sender=User)
-def create_user_(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+
 '''
 class Teacher(models.Model):
-    ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
     Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT, related_name='Subject', blank=True)  #many to many - remake
     working_currently = models.BooleanField()
+
+
+    @staticmethod
+    def create(data, profile):
+        teacher = Teacher
+        teacher.profile = profile
 
 
 class Student(models.Model):
@@ -90,44 +120,4 @@ class MediaStaff(models.Model):
 def create_user_(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
-
-class UserAdapter:
-    def __init__(self, id=0):
-        self.id = id
-
-    @staticmethod
-    def create(self, data):
-        try:
-            email = data["email"]
-            password = data["password"]
-            first_name = data["first_name"]
-            last_name = data["last_name"]
-        except:
-            raise NotImplementedError
-        username = data.get("username", "")
-
-        user = User(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
-        user.save()
-        profile = User.profile
-        gender = data.get("gender", "n")
-        is_teacher = data.get("is_teacher", False)
-        is_student = data.get("is_student", False)
-        birthday = data.get("bday", None)
-        profile.Gender = gender
-        profile.is_teacher = is_teacher
-        profile.is_student = is_student
-        profile.Birthday = birthday
-        profile.save()
-        if is_teacher:
-            teacher = Teacher(ProfileID=profile)
-            teacher.working_currently = data.get('working_currently', False)
-            teacher.save()
-        if is_student:
-            student = Student(ProfileID=profile)
-            student.save()
-
-
-
-
 
