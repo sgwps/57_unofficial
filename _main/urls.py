@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_page, name='Главная'),
     path('news_creation/', creation, name='Создание новости'),
+    path('quill_test/', form_view, name="Quill"),
 ]
