@@ -1,4 +1,6 @@
 from django import forms
+import django.core.validators as validators
+from datetime import datetime
 
 
 class RegistrationForm(forms.Form):
@@ -13,8 +15,14 @@ class RegistrationForm(forms.Form):
     ))
 
 
+def get_max_year():
+    date = datetime.now().year
+    return date + 11
+
+
+
 class StudentRegistrationForm(forms.Form):
-    end_year = forms.IntegerField()
+    end_year = forms.IntegerField(min_value=1940, max_value=get_max_year())
     grade_letter = forms.CharField(max_length=1)
 
 

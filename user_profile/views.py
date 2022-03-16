@@ -71,7 +71,9 @@ class UserRegistration(View):
         if general_form.is_valid():
             result = general_form.cleaned_data
             if student_form.is_valid():
+                print("test1")
                 result = {**result, **student_form.cleaned_data}
+            print("test2")
             if teacher_form.is_valid():
                 result = {**result, **teacher_form.cleaned_data}
             return JsonResponse(result)
