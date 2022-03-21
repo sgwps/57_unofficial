@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
-from news_creation.models import Saved_data
+from news_creation.models import Article
 # Create your views here.
 
 def creation(request):
@@ -29,7 +29,7 @@ def form_view(request):
     if request.method == "POST":
         form = QuillFieldForm(request.POST)
         if form.is_valid():
-            quill = Saved_data(
+            quill = Article(
                 content = form.cleaned_data['content'],
             )
             quill.save()

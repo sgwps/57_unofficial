@@ -133,14 +133,14 @@ QUILL_CONFIGS = {
             'syntax': True,
             'toolbar': [
                 [
-                    {'font': []},
+                    {'font': ['arial']},
                     {'header': []},
                     {'align': []},
                     'bold', 'italic', 'underline', 'strike', 'blockquote',
                     {'color': []},
                     {'background': []},
                 ],
-                ['code-block', 'link'],
+                ['code-block', 'link', 'image', 'formula'],
                 ['clean'],
             ]
         }
