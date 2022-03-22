@@ -19,7 +19,5 @@ import user_profile.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sign_up/', user_profile.views.sign_up),
-    path('sign_up2/', user_profile.views.su2),
-    path('sign_up3/', user_profile.views.UserRegistration.as_view()),
+    path('signup/', user_profile.views.UserRegistration.as_view()),
 ]

@@ -31,7 +31,6 @@ class Profile(models.Model):
     GENDERS = (
         ('m', 'male'),
         ('f', 'female'),
-        ('n', 'neutral')
     )
     is_teacher = models.BooleanField()
     is_student = models.BooleanField()
