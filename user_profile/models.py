@@ -18,7 +18,7 @@ class MediaPost(models.Model):
 
 class Specialization(models.Model):
     Name = models.CharField(max_length=30)
-    Description = models.CharField(max_length=1000)
+    Description = models.CharField(max_length=1000, null=True)
 
 
 class Grade(models.Model):

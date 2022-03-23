@@ -19,7 +19,7 @@
                 </div>
                 <div id="student-registration">
                     <input type="checkbox" v-model="checked" id="student-registration-form">
-                    <ul v-if="checked">
+                    <ul id="student_reg_list">
                         {{ student_reg_form.as_ul }}
                     </ul>
                 </div>
@@ -35,15 +35,9 @@
     </div>
     <div class="footer"></div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         "use strict";
-
-        let student_reg = new Vue({
-            el: "#student-registration",
-            data: {
-                checked: false
-            }
-        });
 
         let teacher_reg = new Vue({
             el: "#teacher-registration",
@@ -51,15 +45,29 @@
                 checked: false
             }
         });
-
+        document.getElementById("student_reg_list").style.display = "none";
         let student_reg_form = document.getElementById("student-registration-form");
-        student_reg_form.addEventListener("checked", function(){
+        student_reg_form.addEventListener("change", function(){
+            console.log(student_reg_form.checked)
             let grade_letter = document.getElementById("grade-letter");
             let end_year = document.getElementById("end-year");
-            if(end_year.isEmpty()){
-                grade_letter.setAttribute("disabled", "disabled");
-            } else {
-                grade_letter.removeAttribute("disabled", "disabled");
+            if (student_reg_form.checked){
+                document.getElementById("student_reg_list").style.display = "block";
+                document.getElementById("end-year").addEventListener(
+                "change", function(){
+                    console.log($("#end-year").val());
+                    $("#id_grade_letter").empty();
+                    $.getJSON("/get_grades",
+                    {
+                        'year': $("#end-year").val()
+                    }, function(data){
+                        console.log(data)
+                    })
+                }
+                )
+            }
+            else{
+                document.getElementById("student_reg_list").style.display = "none";
             }
         });
     </script>

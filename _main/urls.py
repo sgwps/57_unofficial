@@ -16,8 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import user_profile.views
+from django.http import JsonResponse
+
+def get_grades(request):
+    print(request)
+    return JsonResponse({"test":"test"})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', user_profile.views.UserRegistration.as_view()),
+    path('get_grades/', get_grades)
 ]

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django import forms
 
 
@@ -19,20 +20,28 @@ class RegistrationForm(forms.Form):
         widget=forms.RadioSelect
     )
 
+def get_max_year():
+    date = datetime.now().year
+    return date + 11
+
+
 
 class StudentRegistrationForm(forms.Form):
+    def get_grades(self):
+        print(self.end_year)
+
     end_year = forms.IntegerField(widget = forms.TextInput(
         attrs={
-            'id': 'end-year'
+            'id': 'end-year',
+            'min':1940,
+            'max':get_max_year()
         }
-    ))
-    grade_letter = forms.CharField(
-        max_length=1,
-        widget=forms.TextInput(
-            attrs={
-                'id': 'grade-letter'
-            }
-    ))
+    ), min_value=1940, max_value=get_max_year())
+    grade_letter = forms.ChoiceField(required=False)
+
+
+
+
 
 
 class TeacherRegistrationForm(forms.Form):
