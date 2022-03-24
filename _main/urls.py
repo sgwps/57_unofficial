@@ -19,8 +19,8 @@ import user_profile.views
 from django.http import JsonResponse
 
 def get_grades(request):
-    print(request)
-    return JsonResponse({"test":"test"})
+    print(request.GET['year'])
+    return JsonResponse({"test":123})
 
 urlpatterns = [
     path('admin/', admin.site.urls),

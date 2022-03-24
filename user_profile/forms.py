@@ -27,8 +27,6 @@ def get_max_year():
 
 
 class StudentRegistrationForm(forms.Form):
-    def get_grades(self):
-        print(self.end_year)
 
     end_year = forms.IntegerField(widget = forms.TextInput(
         attrs={
