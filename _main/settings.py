@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'accounts.hashers.PBKDF2WrappedSHA1PasswordHasher',
+]
 
 # Application definition
 

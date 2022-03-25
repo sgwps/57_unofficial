@@ -1,8 +1,9 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 from . import models
 from . import forms
+import json
 
 
 class UserRegistration(View):
@@ -56,3 +57,11 @@ class UserRegistration(View):
                 result['is_teacher'] = False
             return JsonResponse(result)
         return render(request, UserRegistration.template_name, context=UserRegistration.context)
+
+
+
+def su2(request):
+    with open('user_profile/test.json') as json_file:
+        data = json.load(json_file)
+        models.Profile.create(data)
+    return HttpResponse('done')
