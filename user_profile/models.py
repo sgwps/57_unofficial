@@ -51,7 +51,7 @@ class Profile(models.Model):
         first_name = data["first_name"]
         last_name = data["last_name"]
         username = data.get("username", "")
-        user = User(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
+        user = User.objects.create_user(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
         user.save()
         profile = Profile()
         profile.User = user
