@@ -27,7 +27,6 @@ def get_max_year():
 
 
 class StudentRegistrationForm(forms.Form):
-
     end_year = forms.IntegerField(widget = forms.TextInput(
         attrs={
             'id': 'end-year',
@@ -35,7 +34,13 @@ class StudentRegistrationForm(forms.Form):
             'max':get_max_year()
         }
     ), min_value=1940, max_value=get_max_year())
-    grade_letter = forms.ChoiceField(required=False)
+    grade_letter = forms.ChoiceField(required=False, widget= forms.Select(attrs={'id':'id_grade_letter'}))
+
+
+
+class CustomProfileForm(forms.Form):
+    custom_grade_letter = forms.ChoiceField(required=False)
+    custom_profile = forms.ChoiceField(required=False)
 
 
 

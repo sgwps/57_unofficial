@@ -11,10 +11,12 @@ class UserRegistration(View):
     general_reg_form = forms.RegistrationForm
     student_reg_form = forms.StudentRegistrationForm
     teacher_reg_form = forms.TeacherRegistrationForm
+    custom_profile_form = forms.CustomProfileForm
     context = {
         'general_reg_form': general_reg_form(),
         'student_reg_form': student_reg_form(),
-        'teacher_reg_form': teacher_reg_form()
+        'teacher_reg_form': teacher_reg_form(),
+        'custom_profile_form': custom_profile_form()
     }
 
     def get(self, request, *args, **kwargs):

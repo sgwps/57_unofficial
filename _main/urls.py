@@ -20,7 +20,7 @@ from django.http import JsonResponse
 
 def get_grades(request):
     print(request.GET['year'])
-    return JsonResponse({"test":123})
+    return JsonResponse({"test":123, "test2":124})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
