@@ -24,7 +24,7 @@ class Specialization(models.Model):
     def get_form_content():
         res = list()
         for spec in Specialization.objects.all():
-            res.append((spec, spec.Name))
+            res.append((spec.id, spec.Name))
         return tuple(res)
 
 
