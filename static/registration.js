@@ -1,6 +1,16 @@
 document.getElementById("student_reg_list").style.display = "none";
 
 
+function check_end_year(){
+    let end_year = document.getElementById("end-year");
+
+    if (end_year.min <= $("#end-year").val() && end_year.max >= $("#end-year").val()){
+        return true;
+    }
+    else return false;
+}
+
+
 let student_reg_form = document.getElementById("student-registration-form");
 console.log(12);
 const letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н' ,'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я']
@@ -13,7 +23,9 @@ student_reg_form.addEventListener("change", function(){
 
         document.getElementById("end-year").addEventListener(
         "change", function(){
+            if (check_end_year()){
             $("#id_grade_letter").empty();
+            console.log($("#end-year").val());
             $.getJSON("/get_grades",
             {
                 'year': $("#end-year").val()
@@ -41,8 +53,12 @@ student_reg_form.addEventListener("change", function(){
 
                     }
                     });
-
             });
+        }
+        else{
+            alert("Enter a valid graduation year")  //делать красную подстветку
+        }
+
         });
     }
     else{

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django import forms
+from . import models
 
 
 class RegistrationForm(forms.Form):
@@ -27,7 +28,7 @@ def get_max_year():
 
 
 class StudentRegistrationForm(forms.Form):
-    end_year = forms.IntegerField(widget = forms.TextInput(
+    end_year = forms.IntegerField(widget = forms.NumberInput(
         attrs={
             'id': 'end-year',
             'min':1940,
@@ -40,7 +41,7 @@ class StudentRegistrationForm(forms.Form):
 
 class CustomProfileForm(forms.Form):
     custom_grade_letter = forms.ChoiceField(required=False, widget= forms.Select(attrs={'id':'id_grade_letter_other'}))
-    custom_profile = forms.ChoiceField(required=False)
+    custom_profile = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content())
 
 
 
@@ -48,4 +49,4 @@ class CustomProfileForm(forms.Form):
 
 
 class TeacherRegistrationForm(forms.Form):
-    subject = forms.CharField(max_length=50)
+    subject = forms.MultipleChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.SelectMultiple(attrs={'multiple':'multiple'}))

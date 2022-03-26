@@ -18,7 +18,14 @@ class MediaPost(models.Model):
 
 class Specialization(models.Model):
     Name = models.CharField(max_length=30)
-    Description = models.CharField(max_length=1000, null=True)
+    Description = models.CharField(max_length=1000, blank=True)
+
+    @staticmethod
+    def get_form_content():
+        res = list()
+        for spec in Specialization.objects.all():
+            res.append((spec, spec.Name))
+        return tuple(res)
 
 
 class Grade(models.Model):

@@ -27,6 +27,8 @@ class UserRegistration(View):
         general_form = UserRegistration.general_reg_form(request.POST)
         student_form = UserRegistration.student_reg_form(request.POST)
         teacher_form = UserRegistration.teacher_reg_form(request.POST)
+        custom_profile_form = UserRegistration.custom_profile_form(request.POST)
+
 
         if general_form.is_valid():
             result['profile'] = {
@@ -47,6 +49,11 @@ class UserRegistration(View):
                 result['student'] = {
                     'graduation_year': student_form.cleaned_data['end_year']
                 }
+                if student_form.cleaned_data['grade_letter'] == 'other':
+                    #save new grade
+                    result['student']['grade_letter'] = custom_profile_form.cleaned_data['custom_grade_letter']
+                else:
+                    result['student']['grade_letter'] = student_form.cleaned_data['grade_letter'][0]
             else:
                 result['is_student'] = False
 
@@ -63,7 +70,4 @@ class UserRegistration(View):
 
 
 def su2(request):
-    with open('user_profile/test.json') as json_file:
-        data = json.load(json_file)
-        models.Profile.create(data)
-    return HttpResponse('done')
+    return HttpResponse(models.Specialization.get_form_content())
