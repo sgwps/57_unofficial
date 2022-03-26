@@ -4,6 +4,6 @@ from django_quill.fields import QuillField
 
 class Article(models.Model):
     content = QuillField()
-    date_created = models.DateTimeField(blank=True)
-    date_uploaded = models.DateTimeField(blank=True)
-    if_uploaded = models.BooleanField(blank=True)
+    date_created = models.DateTimeField()
+    uploaded = models.BooleanField()
+    in_progress = models.BooleanField()
