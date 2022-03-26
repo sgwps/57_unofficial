@@ -49,4 +49,4 @@ class CustomProfileForm(forms.Form):
 
 
 class TeacherRegistrationForm(forms.Form):
-    subject = forms.MultipleChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.SelectMultiple(attrs={'multiple':'multiple'}))
+    subject = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))

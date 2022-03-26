@@ -1,4 +1,6 @@
 document.getElementById("student_reg_list").style.display = "none";
+document.getElementById("teacher_reg_list").style.display = "none";
+
 
 
 function check_end_year(){
@@ -65,3 +67,17 @@ student_reg_form.addEventListener("change", function(){
         document.getElementById("student_reg_list").style.display = "none";
     }
 });
+
+
+let teacher_reg_form = document.getElementById("teacher-registration-form");
+teacher_reg_form.addEventListener("change", function(){
+    if (teacher_reg_form.checked){
+        document.getElementById("teacher_reg_list").style.display = "block";
+
+    }
+    else{
+        document.getElementById("teacher_reg_list").style.display = "none";
+
+    }
+
+})

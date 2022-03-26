@@ -18,7 +18,7 @@
                     </ul>
                 </div>
                 <div id="student-registration">
-                    <input type="checkbox" v-model="checked" id="student-registration-form">
+                    <input type="checkbox" id="student-registration-form">
                     <ul id="student_reg_list">
                         {{ student_reg_form.as_ul }}
                         <li id="custom_profile_li">
@@ -27,8 +27,8 @@
                     </ul>
                 </div>
                 <div id="teacher-registration">
-                    <input type="checkbox" v-model="checked">
-                    <ul v-if="checked">
+                    <input type="checkbox" id="teacher-registration-form">
+                    <ul id="teacher_reg_list">
                         {{ teacher_reg_form.as_ul }}
                     </ul>
                 </div>
