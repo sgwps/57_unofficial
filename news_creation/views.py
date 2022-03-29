@@ -2,6 +2,7 @@ from distutils.command.upload import upload
 from email.policy import default
 from django.http import HttpResponse
 from django.shortcuts import render
+from news_creation.consumers import ChatConsumer
 from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
 from news_creation.models import Article

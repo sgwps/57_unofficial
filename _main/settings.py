@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_quill',
     'news_creation',
+    'channels'
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +73,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = '_main.wsgi.application'
+
+ASGI_APPLICATION = "_main.asgi.application"
 
 
 # Database
