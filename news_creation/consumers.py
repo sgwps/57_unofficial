@@ -2,34 +2,21 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from news_creation.models import Article
+
 
 # pip install channels
 
-class ChatConsumer(WebsocketConsumer):
+class Editor(WebsocketConsumer):
     def connect(self):
-
         self.accept()
-   
+    
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+    def receive(self, text_data=None, bytes_data=None):
+        #self.id = json.loads(text_data)["id"]
+        #article = Article.objects.get(pk=id)
+        print("socket: ", text_data)
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type':'chat_message',
-                'message':message
-            }
-        )
-
-    def chat_message(self, event):
-        message = event['message']
-
-        self.send(text_data=json.dumps({
-            'type':'chat',
-            'message':message
-        }))
 
     def disconnect(self, code):
         print("stop")

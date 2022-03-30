@@ -6,4 +6,4 @@ class Article(models.Model):
     content = QuillField()
     date_created = models.DateTimeField()
     uploaded = models.BooleanField()
-    in_progress = models.BooleanField()
+    in_progress = models.IntegerField()
