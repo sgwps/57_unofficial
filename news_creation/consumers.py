@@ -13,6 +13,7 @@ class Editor(WebsocketConsumer):
     
 
     def receive(self, text_data=None, bytes_data=None):
+        print(self.scope)  # get IP
         #self.id = json.loads(text_data)["id"]
         #article = Article.objects.get(pk=id)
         print("socket: ", text_data)
