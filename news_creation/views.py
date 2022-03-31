@@ -6,30 +6,12 @@ from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
 from news_creation.models import Article
 from datetime import datetime
-# Create your views here.
 
-def creation(request):
-    form_valid = True
-    
-    if request.method == 'POST':
-        f = NewsCreationForm(request.POST)
-        if f.is_valid:
-            pass
-        else:
-            form_valid = False
-    else:
-        f = NewsCreationForm()
-    
-    ctx = {
-        'form': f,
-        'form_valid': form_valid
-    }
-    
-    return render(request, 'news_creation.html', context = ctx)
+
+# Create your views here.
 
 
 def form_view(request):
-    
     if request.method == "POST":
         form = QuillFieldForm(request.POST)
         print('POST:', request.GET.get('id', default=0))
@@ -37,10 +19,10 @@ def form_view(request):
             id = request.GET.get('id', default=0)
             if id == 0:
                 quill = Article(
-                    content = form.cleaned_data['content'],
-                    date_created = datetime.now(),
-                    uploaded = False,
-                    in_progress = False
+                    content=form.cleaned_data['content'],
+                    date_created=datetime.now(),
+                    uploaded=False,
+                    in_progress=False
                 )
                 quill.save()
             else:
@@ -59,11 +41,12 @@ def form_view(request):
             return render(request, 'Quill.html', {'form': form})
         else:
             article = Article.objects.get(pk=id)
-            if article.in_progress == False:
+            if not article.in_progress:
                 form = QuillFieldForm(initial={'content': article.content})
                 article.in_progress = True
                 article.save()
                 return render(request, 'Quill.html', {'form': form})
             else:
                 return HttpResponse("this article is in work")
-#если пользователь закрыл окно с редактором а не отправил на сервер - все еще ин прогресс
+
+# если пользователь закрыл окно с редактором а не отправил на сервер - все еще ин прогресс
