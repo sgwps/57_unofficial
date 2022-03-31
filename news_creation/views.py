@@ -39,13 +39,10 @@ def form_view(request):
                 quill = Article(
                     content = form.cleaned_data['content'],
                     date_created = datetime.now(),
-                    uploaded = False,
-                    in_progress = False
                 )
                 quill.save()
             else:
                 article = Article.objects.get(pk=id)
-                article.in_progress = False
                 article.content = form.cleaned_data['content']
                 article.save()
             return HttpResponse("done")
@@ -59,11 +56,10 @@ def form_view(request):
             return render(request, 'Quill.html', {'form': form})
         else:
             article = Article.objects.get(pk=id)
-            if article.in_progress == False:
-                form = QuillFieldForm(initial={'content': article.content})
-                article.in_progress = True
-                article.save()
-                return render(request, 'Quill.html', {'form': form})
-            else:
-                return HttpResponse("this article is in work")
+            # if article.in_progress == False:
+            form = QuillFieldForm(initial={'content': article.content})
+            article.save()
+            return render(request, 'Quill.html', {'form': form})
+            '''else:
+                return HttpResponse("this article is in work")'''
 #если пользователь закрыл окно с редактором а не отправил на сервер - все еще ин прогресс

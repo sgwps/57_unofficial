@@ -5,5 +5,4 @@ from django_quill.fields import QuillField
 class Article(models.Model):
     content = QuillField()
     date_created = models.DateTimeField()
-    uploaded = models.BooleanField()
     editor = models.GenericIPAddressField(blank=True, null = True)

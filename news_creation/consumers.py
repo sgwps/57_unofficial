@@ -13,11 +13,14 @@ class Editor(WebsocketConsumer):
     
 
     def receive(self, text_data=None, bytes_data=None):
-        print(self.scope)  # get IP
-        #self.id = json.loads(text_data)["id"]
-        #article = Article.objects.get(pk=id)
-        print("socket: ", text_data)
+        client = self.scope['client']  # get IP
+        self.id = json.loads(text_data)["id"]
+        if self.id != None:
+            article = Article.objects.get(pk=self.id)
+            article.editor = client
+            article.save()
+        
 
 
     def disconnect(self, code):
-        print("stop")
+        print(self.id)
