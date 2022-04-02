@@ -1,0 +1,16 @@
+a {
+    font-size: 20px;
+}
+
+.header {
+    height: 60px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.header-element {
+    text-align: center;
+    width: 200px;
+}
