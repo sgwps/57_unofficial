@@ -6,7 +6,7 @@ from . import models
 class RegistrationForm(forms.Form):
     name = forms.CharField(max_length=50)
     surname = forms.CharField(max_length=50)
-    username = forms.CharField(max_length=50)
+    username = forms.CharField(max_length=50, required=True)
     email = forms.EmailField(max_length=50)
     password = forms.CharField(max_length=30, widget=forms.PasswordInput())
     birth_date = forms.DateField(widget = forms.DateInput(
@@ -41,7 +41,7 @@ class StudentRegistrationForm(forms.Form):
 
 class CustomProfileForm(forms.Form):
     custom_grade_letter = forms.ChoiceField(required=False, widget= forms.Select(attrs={'id':'id_grade_letter_other'}))
-    custom_profile = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content())
+    # custom_profile = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content())
 
 
 
@@ -49,4 +49,5 @@ class CustomProfileForm(forms.Form):
 
 
 class TeacherRegistrationForm(forms.Form):
-    subject = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))
+    subject = forms.ImageField()
+    # subject = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))

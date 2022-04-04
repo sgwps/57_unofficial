@@ -5,61 +5,84 @@ from django.dispatch import receiver
 from datetime import datetime
 
 
-# Create your models here.
+def GetAll(Model):    #  for Subject, MediaPost, Specialization, Gender
+    result = list()
+    model_list = Model.objects.all()
+    for item in model_list:
+        if item.name != None:
+            result.append((item.id, item.name))
+    return tuple(result)
 
 
-class Subject(models.Model):
-    Name = models.CharField(max_length=40)
 
-
-class MediaPost(models.Model):
-    Name = models.CharField(max_length=30)
 
 
 class Specialization(models.Model):
-    Name = models.CharField(max_length=30)
-    Description = models.CharField(max_length=1000, blank=True)
-
-    @staticmethod
-    def get_form_content():
-        res = list()
-        for spec in Specialization.objects.all():
-            res.append((spec.id, spec.Name))
-        return tuple(res)
+    name = models.CharField(max_length=30, null=True)
 
 
 class Grade(models.Model):
-    GraduationYear = models.IntegerField()
-    Specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='Class')
-    Letter = models.CharField(max_length=1)
+    graduation_year = models.IntegerField()
+    specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True)
+    letter = models.CharField(max_length=1)
+
+    @staticmethod
+    def GetGradesByYear(year):
+        result = list()
+        grades_list = Grade.objects.filter(graduation_year=year)
+        for grade in grades_list:
+            spec = grade.specialization.name
+            result.append((grade.id, (grade.letter, spec)))
+        return tuple(result)
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=40, null=True)
+
+
+class MediaPost(models.Model):
+    name = models.CharField(max_length=40, null=True)
+
+
+class Gender(models.Model):  # ISO 5218
+    name = models.CharField(max_length=20, null=True)
+
+
+'''
+INSERT INTO user_profile_gender (id, gender) VALUES (0, "not known");
+INSERT INTO user_profile_gender (id, gender) VALUES (1, "male");
+INSERT INTO user_profile_gender (id, gender) VALUES (2, "female");
+INSERT INTO user_profile_gender (id, gender) VALUES (9, "not applicable");
+'''
+
+
+def create_user(data):
+    email = data["email"]
+    password = data["password"]
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+    username = data["username"]
+    user = User.objects.create_user(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
+    user.save()
+    return user
 
 
 class Profile(models.Model):
-    GENDERS = (
-        ('m', 'male'),
-        ('f', 'female'),
-    )
-    is_teacher = models.BooleanField()
-    is_student = models.BooleanField()
+    is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
-    is_mediaStaff = models.BooleanField(default=False)
-    User = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    Gender = models.CharField(max_length=1, choices=GENDERS)
-    isConfirmed = models.BooleanField(default=False)
-    BIO = models.CharField(blank=True, max_length=500)
-    Birthday = models.DateField(blank=True, default=0)
-    city = models.IntegerField(blank=True, default=0)
+    is_media_staff = models.BooleanField(default=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles')
+    gender = models.ForeignKey(to=Gender, on_delete=models.PROTECT, related_name='users', default=0)
+    is_confirmed = models.BooleanField(default=False)
+    bio = models.CharField(blank=True, max_length=1000)
+    birthday = models.DateField(blank=True, null=True)
+    city = models.IntegerField(blank=True)
 
 
     @staticmethod
     def create(data):  #data - json or dict??
-        email = data["email"]
-        password = data.get("password", "qwerty")
-        first_name = data["first_name"]
-        last_name = data["last_name"]
-        username = data.get("username", "")
-        user = User.objects.create_user(email=email, password=password, first_name=first_name, last_name=last_name, username=username)
-        user.save()
+        user = create_user(data['user'])
         profile = Profile()
         profile.User = user
         profile.Gender = data.get("gender", "n")
@@ -73,29 +96,8 @@ class Profile(models.Model):
             Teacher.create(data.get("teacher", dict()), profile)
 
 
-
-'''
-    @classmethod
-    def create(cls, attrs):
-        '''''''
-        if attrs.is_teacher:
-
-        if attrs.is_student:
-
-@receiver(post_save, sender)
-def save_user_
-
-
-# Magic from Habr section link for original topic: https://habr.com/ru/post/313764/
-# разбить на классы по Positions???
-
-
-
-'''
 class Teacher(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
-    #Subject = models.ForeignKey(to=Subject, on_delete=models.PROTECT, related_name='Subject', blank=True)  #many to many - remake
-    #working_currently = models.BooleanField(blank=True)
     Subject = models.CharField(max_length=40)
 
 

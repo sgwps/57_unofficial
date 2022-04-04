@@ -6,6 +6,11 @@ from . import forms
 import json
 
 
+def test(request):
+    return HttpResponse(models.Grade.GetGradesByYear(2011))
+
+
+
 class UserRegistration(View):
     template_name = 'registration.html'
     general_reg_form = forms.RegistrationForm
