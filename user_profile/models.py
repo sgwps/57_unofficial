@@ -15,10 +15,19 @@ def GetAll(Model):    #  for Subject, MediaPost, Specialization, Gender
 
 
 
-
-
 class Specialization(models.Model):
-    name = models.CharField(max_length=30, null=True)
+    name = models.CharField(max_length=40, null=True)
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=40, null=True)
+
+
+class MediaPost(models.Model):
+    name = models.CharField(max_length=40, null=True)
+
+class Gender(models.Model):  # ISO 5218
+    name = models.CharField(max_length=20, null=True)
 
 
 class Grade(models.Model):
@@ -36,16 +45,7 @@ class Grade(models.Model):
         return tuple(result)
 
 
-class Subject(models.Model):
-    name = models.CharField(max_length=40, null=True)
 
-
-class MediaPost(models.Model):
-    name = models.CharField(max_length=40, null=True)
-
-
-class Gender(models.Model):  # ISO 5218
-    name = models.CharField(max_length=20, null=True)
 
 
 '''
@@ -84,11 +84,11 @@ class Profile(models.Model):
     def create(data):  #data - json or dict??
         user = create_user(data['user'])
         profile = Profile()
-        profile.User = user
-        profile.Gender = data.get("gender", "n")
+        profile.user = user
+        profile.gender = data.get("gender", "n")
         profile.is_teacher = data.get("is_teacher", False)
         profile.is_student = data.get("is_student", False)
-        profile.Birthday = datetime.strptime(data.get("birth_date", None), "%Y-%m-%d")
+        profile.birthday = datetime.strptime(data.get("birth_date", None), "%Y-%m-%d")
         profile.save()
         if profile.is_student:
             Student.create(data.get("student", dict()), profile)
@@ -97,28 +97,36 @@ class Profile(models.Model):
 
 
 class Teacher(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="profile")
-    Subject = models.CharField(max_length=40)
-
+    subjects = models.ManyToManyField(Subject)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='teacher')
 
     @staticmethod
     def create(data, profile):
         teacher = Teacher()
         teacher.profile = profile
-        teacher.Subject = data.get("subject", "")
+        subjects = data.get("subjects", tuple())
+        for subject_id in subjects:
+            teacher.subjects.add(Subject.objects.get(pk=subject_id))
+        other = data.get("other_subjects", tuple())
+        for subject_name in other:
+            subject = Subject.objects.create(name=subject_name)
+            teacher.subjects.add(subject)
         teacher.save()
 
 
 class Student(models.Model):
-    ProfileID = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    # Grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='Class', blank=True)
-    Graduation_year = models.IntegerField(blank=True, default=None)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='student')
+    grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='students', blank=True)
+    graduation_year = models.IntegerField(blank=True)
+
 
     @staticmethod
     def create(data, profile):
         student = Student()
-        student.ProfileID = profile
-        student.Graduation_year = data.get("end_year", None)
+        student.profile = profile
+        grade = data.get("grade", None)
+       
+
         student.save()
 
 
