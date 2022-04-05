@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Медиа 57:: регистрация</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'reg/style.css' %}" />
+    <script src="{% static 'reg/app.js' %}"></script> 
 </head>
+
 
 <body>
     <div class="header"></div>
@@ -29,7 +33,25 @@
                 <div id="teacher-registration">
                     <input type="checkbox" id="teacher-registration-form">
                     <ul id="teacher_reg_list">
-                        {{ teacher_reg_form.as_ul }}
+                        <form>
+                            <div class="multiselect">
+                              <div class="selectBox" onclick="showCheckboxes()">
+                                <select>
+                                  <option>Subject</option>
+                                </select>
+                                <div class="overSelect"></div>
+                              </div>
+                              
+                              <datalist id="checkboxes">
+                                <label for="one">
+                                    <input type="checkbox" id="one" />First checkbox</label>
+                                  <label for="two">
+                                    <input type="checkbox" id="two" />Second checkbox</label>
+                                  <label for="three">
+                                    <input type="checkbox" id="three" />Third checkbox</label>
+                              </datalist>
+                            </div>
+                          </form>
                     </ul>
                 </div>
                 <input type="submit" value="Зарегистрироваться">

@@ -81,3 +81,5 @@ teacher_reg_form.addEventListener("change", function(){
     }
 
 })
+
+
