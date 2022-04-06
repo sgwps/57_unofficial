@@ -41,7 +41,7 @@ class StudentRegistrationForm(forms.Form):
 
 class CustomProfileForm(forms.Form):
     custom_grade_letter = forms.ChoiceField(required=False, widget= forms.Select(attrs={'id':'id_grade_letter_other'}))
-    custom_profile = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content())
+    custom_profile = forms.ChoiceField(required=False)
 
 
 
@@ -49,4 +49,4 @@ class CustomProfileForm(forms.Form):
 
 
 class TeacherRegistrationForm(forms.Form):
-    subject = forms.ChoiceField(required=False, choices=models.Specialization.get_form_content(), widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))
+    subject = forms.ChoiceField(required=False, widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))

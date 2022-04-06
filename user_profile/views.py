@@ -71,3 +71,11 @@ class UserRegistration(View):
 
 def su2(request):
     return HttpResponse(models.Specialization.get_form_content())
+
+
+def GetSubjects(request):
+    result = models.GetAll(models.Subject)
+    json_response = dict()
+    for subject in result:
+        json_response[subject[0]] = subject[1]
+    return JsonResponse(json_response)
