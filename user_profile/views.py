@@ -4,6 +4,7 @@ from django.views import View
 from . import models
 from . import forms
 import json
+from django.core.mail import EmailMessage
 
 
 def test(request):
@@ -75,4 +76,6 @@ class UserRegistration(View):
 
 
 def su2(request):
-    return HttpResponse(models.Specialization.get_form_content())
+    email = EmailMessage("topic", "test", to=["mail@mail.com"])
+    email.send()
+    return HttpResponse('Please confirm your email address to complete the registration')
