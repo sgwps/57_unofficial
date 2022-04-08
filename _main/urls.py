@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_page, name='Главная'),
     path('quill_test/', form_view, name="Quill"),
-    path('news/', news, name='Новости')
+    path('news/', news, name='Новости'),
+    path('test/', show_smth),
 ]
