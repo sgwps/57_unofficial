@@ -11,7 +11,7 @@
 <body>
     <div class="header"></div>
     <div class="content">
-        {{ error }}
+
         <div id="registration-forms">
             <form method="post">
                 {% csrf_token %}
@@ -20,7 +20,7 @@
                         {{ general_reg_form.as_ul }}
                     </ul>
                 </div>
-                <div id="student-registration">
+                <!--<div id="student-registration">
                     <input type="checkbox" id="student-registration-form">
                     <ul id="student_reg_list">
                         {{ student_reg_form.as_ul }}
@@ -50,7 +50,7 @@
                         
                     </ul>
 
-                </div>
+                </div>-->
                 <input type="submit" value="Зарегистрироваться">
             </form>
         </div>

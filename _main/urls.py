@@ -24,8 +24,11 @@ def get_grades(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', user_profile.views.UserRegistration.as_view()),
+    path('signup/', user_profile.views.BasicRegistration.as_view()),
     path('signup2/', user_profile.views.su2),
-    path('get_grades/', get_grades),
-    path('get_subjects', user_profile.views.GetSubjects)
+    path('get_grades/', user_profile.views.GetGrades),
+    path('get_subjects', user_profile.views.GetSubjects),
+    path('check_username', user_profile.views.CheckUsename),
+    path('check_email', user_profile.views.CheckEmail)
+
 ]

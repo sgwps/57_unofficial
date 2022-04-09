@@ -11,9 +11,15 @@ def GetAll(Model):    #  for Subject, MediaPost, Specialization, Gender
     for item in model_list:
         if item.name != None:
             result.append((item.id, item.name))
+    print(result)
     return tuple(result)
 
-
+def GetAllInDict(Model):
+    result = GetAll(Model)
+    result_dict = dict()
+    for i in result:
+        result_dict[i[0]] = i[1]
+    return result_dict
 
 class Specialization(models.Model):
     name = models.CharField(max_length=40, null=True)
@@ -37,12 +43,18 @@ class Grade(models.Model):
 
     @staticmethod
     def GetGradesByYear(year):
+        letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н' ,'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я']
         result = list()
         grades_list = Grade.objects.filter(graduation_year=year)
         for grade in grades_list:
             spec = grade.specialization.name
             result.append((grade.id, (grade.letter, spec)))
-        return tuple(result)
+            letters.remove(grade.letter)
+        res_dict = {
+            "grades":result,
+            "letters":letters
+        }
+        return res_dict
 
 
 
@@ -77,23 +89,23 @@ class Profile(models.Model):
     is_confirmed = models.BooleanField(default=False)
     bio = models.CharField(blank=True, max_length=1000)
     birthday = models.DateField(blank=True, null=True)
-    city = models.IntegerField(blank=True)
+    city = models.IntegerField(blank=True, null=True)
 
 
     @staticmethod
     def create(data):  #data - json or dict??
+        print(data)
         user = create_user(data['user'])
+        user.save()
         profile = Profile()
         profile.user = user
-        profile.gender = data.get("gender", "n")
-        profile.is_teacher = data.get("is_teacher", False)
-        profile.is_student = data.get("is_student", False)
-        profile.birthday = datetime.strptime(data.get("birth_date", None), "%Y-%m-%d")
+        print(data["profile"].get("gender"))
+        profile.gender = Gender.objects.get(pk=data["profile"].get("gender"))
+        birthday = data["profile"].get("birthday")
+        print(birthday)
+        if birthday != None:
+            profile.birthday = birthday
         profile.save()
-        if profile.is_student:
-            Student.create(data.get("student", dict()), profile)
-        if profile.is_teacher:
-            Teacher.create(data.get("teacher", dict()), profile)
 
 
 class Teacher(models.Model):
