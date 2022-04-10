@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Медиа 57:: регистрация</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'reg/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 
 
@@ -21,7 +21,7 @@
                     </ul>
                 </div>
                 <div id="student-registration">
-                    <input type="checkbox" id="student-registration-checkbox">I'm a student</input>
+                    <input type="checkbox" name="is_student" id="student-registration-checkbox">I'm a student</input>
                     <ul id="student_reg_list">
                         {{ student_reg_form.as_ul }}
                         <li id="custom_grade_li">
@@ -29,6 +29,29 @@
                         </li>
                     </ul>
                 </div>
+                <div id="teacher-registration">
+                    <input type="checkbox" id="teacher-registration-form">
+                    <ul id="teacher_reg_list">
+                        <form>
+                            <div class="multiselect">
+                              <div class="selectBox" onclick="showCheckboxes()">
+                                <select>
+                                  <option>Subject</option>
+                                </select>
+                                <div class="overSelect"></div>
+                              </div>
+                              
+                              <div id="checkboxes_teacher_id">
+                              </div>
+                            </div>
+                        </form>
+                        <div id="other_subjects"></div>
+                        <button type="button" onclick="AddAnotherSubject()">Another subject</button> 
+                        
+                    </ul>
+
+                </div>
+
                 <input id="id_submit" type="submit" value="Зарегистрироваться">
             </form>
         </div>
@@ -38,6 +61,7 @@
     {% load static %}
     <script src="{% static 'basic_registration.js' %}"> </script>
     <script src="{% static 'student_registration.js' %}"> </script>
+    <script src="{% static 'teacher_registration.js' %}"> </script>
 
 </body>
 </html>

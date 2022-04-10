@@ -11,7 +11,6 @@ def GetAll(Model):    #  for Subject, MediaPost, Specialization, Gender
     for item in model_list:
         if item.name != None:
             result.append((item.id, item.name))
-    print(result)
     return tuple(result)
 
 def GetAllInDict(Model):
@@ -56,6 +55,20 @@ class Grade(models.Model):
         }
         return res_dict
 
+    @staticmethod
+    def GetGrade(data):
+        if data['grade_year'] == None:
+            return None
+        if data['grade_letter'] != 'other':
+            return Grade.objects.get_or_create(graduation_year=data['graduation_year'], letter=data.get('grade_letter'))
+        else:
+            grade = Grade()
+            grade.graduation_year = data['graduation_year']
+            if data.get('grade', {}).get('custom_grade_letter') != None:
+                grade.letter = data.get('grade', {}).get('custom_grade_letter')
+                grade.specialization = Specialization.objects.get(name=data['grade']['specialization'])
+            grade.save()
+            return grade
 
 
 
@@ -102,9 +115,12 @@ class Profile(models.Model):
         print(data["profile"].get("gender"))
         profile.gender = Gender.objects.get(pk=data["profile"].get("gender"))
         birthday = data["profile"].get("birthday")
-        print(birthday)
         if birthday != None:
             profile.birthday = birthday
+        profile.save()
+        if data.get('is_student') == True:
+            profile.is_student = True
+            Student.create(data['student'], profile)
         profile.save()
 
 
@@ -128,17 +144,15 @@ class Teacher(models.Model):
 
 class Student(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='student')
-    grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='students', blank=True)
-    graduation_year = models.IntegerField(blank=True)
+    grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='students', blank=True, null=True)
 
 
     @staticmethod
     def create(data, profile):
         student = Student()
         student.profile = profile
-        grade = data.get("grade", None)
-       
-
+        if data.get('graduation_year') != None:
+            grade = Grade.GetGrade(data)
         student.save()
 
 

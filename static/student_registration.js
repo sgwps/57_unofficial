@@ -1,4 +1,5 @@
 document.getElementById("student_reg_list").style.display = "none";
+var custom_profile = document.getElementById("id_custom_profile");
 
 function check_end_year(){
     let end_year = document.getElementById("end-year");
@@ -17,19 +18,22 @@ student_reg_form.addEventListener("change", function(){
     }
     else{
         document.getElementById("student_reg_list").style.display = "none";
+        custom_grade_letter.attributes.required = false;
+        custom_profile.attributes.required = false;
     }
 });
 
 function EndYearProcesing(data){
     $.each(data["grades"], function(i, val) {
-        $("#id_grade_letter").append("<option value='" + i + "'>" + val[0] + " : " + val[1] + "</option>");
+        $("#id_grade_letter").append("<option value='" + val[0] + "'>" + val[0] + " : " + val[1] + "</option>");
     });
+    $("#id_grade_letter_other").append("<option value=' '></option>");
     for (const i of data["letters"])
     {
     $("#id_grade_letter_other").append("<option value='" + i + "'>" + i + "</option>");
     }
     if (document.getElementById("id_grade_letter_other").options.length != 0) {
-    $("#id_grade_letter").append("<option id='other_letter' value='0'>other</option>");
+    $("#id_grade_letter").append("<option id='other_letter' value='other'>other</option>");
     }
     if (document.getElementById("id_grade_letter").options.length == 1) {
         console.log("test44")
@@ -44,6 +48,8 @@ function EndYearProcesing(data){
     }
     else{
         document.getElementById("custom_grade_li").style.display = "none";
+        custom_grade_letter.attributes.required = false;
+        custom_profile.attributes.required = false;
     }
     });
 }
@@ -67,3 +73,29 @@ end_year.addEventListener(
     }
 
 });
+
+
+let custom_grade_letter = document.getElementById("id_grade_letter_other");
+
+custom_grade_letter.addEventListener(
+    "change", function(){
+        console.log($(custom_grade_letter).val)
+        if ($(custom_grade_letter).val != "") {
+            custom_profile.attributes.required = false;
+        }
+        else{
+            custom_profile.attributes.required = true;
+        }
+    }
+);
+
+custom_profile.addEventListener(
+    "change", function(){
+        if ($(custom_profile).val != "") {
+            custom_grade_letter.attributes.required = false;
+        }
+        else{
+            custom_grade_letter.attributes.required = true;
+        }
+    }
+)
