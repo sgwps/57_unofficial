@@ -38,7 +38,7 @@ class Gender(models.Model):  # ISO 5218
 class Grade(models.Model):
     graduation_year = models.IntegerField()
     specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True)
-    letter = models.CharField(max_length=1)
+    letter = models.CharField(max_length=1, null=True, blank='True')
 
     @staticmethod
     def GetGradesByYear(year):
@@ -46,9 +46,12 @@ class Grade(models.Model):
         result = list()
         grades_list = Grade.objects.filter(graduation_year=year)
         for grade in grades_list:
-            spec = grade.specialization.name
+            spec = grade.specialization
+            if spec != None:
+                spec = spec.name
             result.append((grade.id, (grade.letter, spec)))
-            letters.remove(grade.letter)
+            if grade.letter != None:
+                letters.remove(grade.letter)
         res_dict = {
             "grades":result,
             "letters":letters
