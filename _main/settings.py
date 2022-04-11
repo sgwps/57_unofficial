@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'news',
-    'user_profile'
+    'user_profile',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +136,4 @@ if DEBUG:
        ]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+

@@ -105,7 +105,7 @@ class Profile(models.Model):
     is_manager = models.BooleanField(default=False)
     is_media_staff = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles')
-    gender = models.ForeignKey(to=Gender, on_delete=models.PROTECT, related_name='users', default=0)
+    gender = models.ForeignKey(to=Gender, on_delete=models.PROTECT, related_name='users', null=True)
     is_confirmed = models.BooleanField(default=False)
     bio = models.CharField(blank=True, max_length=1000)
     birthday = models.DateField(blank=True, null=True)
@@ -119,8 +119,11 @@ class Profile(models.Model):
         user.save()
         profile = Profile()
         profile.user = user
-        print(data["profile"].get("gender"))
-        profile.gender = Gender.objects.get(pk=data["profile"].get("gender"))
+        print("----", int(data["profile"].get("gender")))
+        try:
+            profile.gender = Gender.objects.get(pk=int(data["profile"].get("gender")))
+        except:
+            profile.gender = None
         birthday = data["profile"].get("birthday")
         if birthday != None:
             profile.birthday = birthday
