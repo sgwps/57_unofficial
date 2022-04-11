@@ -104,18 +104,19 @@ custom_grade_letter.addEventListener(
     "change", function(){
         console.log($(custom_grade_letter).val)
         if ($(custom_grade_letter).val() != "" && $(custom_profile).val() == "") {
-            submit_button.disabled = true;
+            $(custom_profile).attr('required', 'required');            
             console.log("test831")
 
         }
         else if ($(custom_grade_letter).val() == "" && $(custom_profile).val() != ""){
-            submit_button.disabled = true;
+            $(custom_grade_letter).attr('required', 'required');            
             console.log("test832")
 
 
         }
         else{
-            submit_button.disabled = false;
+            $(custom_profile).removeAttr('required');
+            $(custom_grade_letter).removeAttr('required');    
             console.log("test833")
 
         }
@@ -125,19 +126,20 @@ custom_grade_letter.addEventListener(
 custom_profile.addEventListener(
     "change", function(){
         if ($(custom_grade_letter).val() != "" && $(custom_profile).val() == "") {
-            submit_button.disabled = true;
+            $(custom_profile).attr('required', 'required');            
             console.log("test834")
 
 
         }
         else if ($(custom_grade_letter).val() == "" && $(custom_profile).val() != ""){
-            submit_button.disabled = true;
+            $(custom_grade_letter).attr('required', 'required');            
             console.log("test835")
 
 
         }
         else{
-            submit_button.disabled = false;
+            $(custom_profile).removeAttr('required');
+            $(custom_grade_letter).removeAttr('required');  
             console.log("test836")
 
         }
