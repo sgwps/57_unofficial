@@ -49,9 +49,13 @@ class Grade(models.Model):
             spec = grade.specialization
             if spec != None:
                 spec = spec.name
-            result.append((grade.id, (grade.letter, spec)))
+            tuple = ((grade.id, (grade.letter, spec)))
             if grade.letter != None:
                 letters.remove(grade.letter)
+            else:
+                tuple[1][0] = ""
+                tuple[1][1] = ""
+            result.append(tuple)
         res_dict = {
             "grades":result,
             "letters":letters

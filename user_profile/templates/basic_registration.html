@@ -15,6 +15,9 @@
         <div id="registration-forms">
             <form method="post">
                 {% csrf_token %}
+                {% if form.error %}
+                This should pop up if there is an error
+                {% endif %}
                 <div id="general-registration">
                     <ul>
                         {{ general_reg_form.as_ul }}
@@ -30,9 +33,8 @@
                     </ul>
                 </div>
                 <div id="teacher-registration">
-                    <input type="checkbox" id="teacher-registration-form">
+                    <input type="checkbox" id="teacher-registration-form" name="is_teacher">
                     <ul id="teacher_reg_list">
-                        <form>
                             <div class="multiselect">
                               <div class="selectBox" onclick="showCheckboxes()">
                                 <select>
@@ -44,7 +46,6 @@
                               <div id="checkboxes_teacher_id">
                               </div>
                             </div>
-                        </form>
                         <div id="other_subjects"></div>
                         <button type="button" onclick="AddAnotherSubject()">Another subject</button> 
                         
@@ -62,6 +63,7 @@
     <script src="{% static 'basic_registration.js' %}"> </script>
     <script src="{% static 'student_registration.js' %}"> </script>
     <script src="{% static 'teacher_registration.js' %}"> </script>
+
 
 </body>
 </html>

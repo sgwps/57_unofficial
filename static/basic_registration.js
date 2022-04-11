@@ -1,6 +1,5 @@
 let username_element = document.getElementById('id_username');
 let submit_button = document.getElementById('id_submit');
-submit_button.blur();
 
 username_element.addEventListener("change", function(){
     $.getJSON(

@@ -56,4 +56,4 @@ class CustomGradeForm(forms.Form):
 
 
 class TeacherRegistrationForm(forms.Form):
-    subject = forms.ChoiceField(required=False, widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple'}))
+    subject = forms.ChoiceField(required=False, widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple', 'id':'checkboxes_teacher_id'}))

@@ -17,7 +17,8 @@ class BasicRegistration(View):
     context = {
         'general_reg_form': general_reg_form,
         'student_reg_form': student_reg_form,
-        'custom_profile_form': grade_form
+        'custom_profile_form': grade_form,
+        'teacher_reg_form' : teacher_form
     }
 
 
@@ -30,7 +31,6 @@ class BasicRegistration(View):
         general_form = BasicRegistration.general_reg_form(request.POST)
         student_form = BasicRegistration.student_reg_form(request.POST)
         grade_form = BasicRegistration.grade_form(request.POST)
-        teacher_form = BasicRegistration.teacher_form(request.POST)
         if general_form.is_valid():
             result = dict()
             result['profile'] = {
@@ -56,8 +56,18 @@ class BasicRegistration(View):
                         'custom_grade_letter' : grade_form.cleaned_data['custom_grade_letter'],
                         'custom_profile' : grade_form.cleaned_data['custom_profile']
                     }
-            if teacher_form.is_valid() and request.POST.get('is_teacher') == 'on':
-                print(1)
+            if request.POST.get('is_teacher') == 'on':
+                result['is_teacher'] = True
+                subjects = []
+                new_subjects = []
+                for key, value in request.POST.items():
+                    if key[:8] == "subject_":
+                        subjects.append(int(key[8:]))
+                    if key[:15] == "another_subject":
+                        new_subjects.append(value.capitalize())
+                print("sub0", subjects)
+                print("sub1", new_subjects)
+
 
             models.Profile.create(result)
             return HttpResponse(str(request.POST))
@@ -113,3 +123,11 @@ def CheckEmail(request):
 def GetGrades(request):
     year = request.GET['year']
     return JsonResponse(models.Grade.GetGradesByYear(year))
+
+
+def GetSpecializations(request):
+    result = models.GetAll(models.Specialization)
+    json_response = dict()
+    for subject in result:
+        json_response[subject[0]] = subject[1]
+    return JsonResponse(json_response)
