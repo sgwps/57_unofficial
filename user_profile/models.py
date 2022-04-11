@@ -128,6 +128,9 @@ class Profile(models.Model):
         if data.get('is_student') == True:
             profile.is_student = True
             Student.create(data['student'], profile)
+        if data.get('is_teacher') == True:
+            profile.is_teacher = True
+            Student.create(data['teacher'], profile)
         profile.save()
 
 
@@ -142,9 +145,9 @@ class Teacher(models.Model):
         subjects = data.get("subjects", tuple())
         for subject_id in subjects:
             teacher.subjects.add(Subject.objects.get(pk=subject_id))
-        other = data.get("other_subjects", tuple())
+        other = data.get("new_subjects", tuple())
         for subject_name in other:
-            subject = Subject.objects.create(name=subject_name)
+            subject = Subject.objects.get_or_create(name=subject_name)
             teacher.subjects.add(subject)
         teacher.save()
 

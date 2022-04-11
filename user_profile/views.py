@@ -65,8 +65,8 @@ class BasicRegistration(View):
                         subjects.append(int(key[8:]))
                     if key[:15] == "another_subject":
                         new_subjects.append(value.capitalize())
-                print("sub0", subjects)
-                print("sub1", new_subjects)
+                result["teacher"]["subjects"] = subjects
+                result["teacher"]["new_subjects"] = new_subjects
 
 
             models.Profile.create(result)
@@ -75,19 +75,6 @@ class BasicRegistration(View):
 
 
 
-'''
-
-
-            if teacher_form.is_valid():
-                result['is_teacher'] = True
-                result['teacher'] = {
-                    'subject': teacher_form.cleaned_data['subject']
-                }
-            else:
-                result['is_teacher'] = False
-            return JsonResponse(result)
-        return render(request, UserRegistration.template_name, context=UserRegistration.context)
-'''
 
 
 def su2(request):
