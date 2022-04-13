@@ -5,7 +5,7 @@ from django.shortcuts import render
 from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
 from news_creation.models import Article
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 # Create your views here.
 
 def creation(request):
@@ -44,6 +44,7 @@ def form_view(request):
             else:
                 article = Article.objects.get(pk=id)
                 article.content = form.cleaned_data['content']
+                article.time_flag = None
                 article.save()
             return HttpResponse("done")
         return HttpResponse("not hehe")
@@ -56,10 +57,11 @@ def form_view(request):
             return render(request, 'Quill.html', {'form': form})
         else:
             article = Article.objects.get(pk=id)
-            # if article.in_progress == False:
-            form = QuillFieldForm(initial={'content': article.content})
-            article.save()
-            return render(request, 'Quill.html', {'form': form})
-            '''else:
-                return HttpResponse("this article is in work")'''
-#если пользователь закрыл окно с редактором а не отправил на сервер - все еще ин прогресс
+            now = datetime.now(timezone.utc)
+            if article.editor == None and (article.time_flag == None or abs(article.time_flag - now).total_seconds() > 300):
+                form = QuillFieldForm(initial={'content': article.content})
+                article.time_flag = datetime.now()
+                article.save()
+                return render(request, 'Quill.html', {'form': form})
+            else:
+                return HttpResponse("this article is in work")

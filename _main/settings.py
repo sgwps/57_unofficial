@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lw%qwbhs2cz#=$wdhb!1g*wg&u2q1l!*ex@%t8s*)s(-!7wy8$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.42']
+ALLOWED_HOSTS = ['192.168.1.42', '127.0.0.1']
 
 
 # Application definition
@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'channels'
 ]
 
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND':'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 
 MIDDLEWARE = [

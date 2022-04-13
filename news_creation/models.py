@@ -4,5 +4,6 @@ from django_quill.fields import QuillField
 
 class Article(models.Model):
     content = QuillField()
-    date_created = models.DateTimeField()
-    editor = models.GenericIPAddressField(blank=True, null = True)
+    date_created = models.DateTimeField(blank=True, null = True)
+    editor = models.IntegerField(blank=True, null = True)
+    time_flag = models.DateTimeField(blank=True, null=True)
