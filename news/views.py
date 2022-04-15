@@ -44,7 +44,7 @@ def show_smth(request):
         k += 1
     print(cnt)
     print(content)
-    return render(request, 'test.html', {"content": cnt})
+    return render(request, 'test.html', {"content": content})
 
 
 
