@@ -6,6 +6,7 @@ from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
 from news_creation.models import Article
 from datetime import datetime
+from news.views import show_smth
 
 
 # Create your views here.
@@ -30,7 +31,8 @@ def form_view(request):
                 article.in_progress = False
                 article.content = form.cleaned_data['content']
                 article.save()
-            return HttpResponse("done")
+            return show_smth(request)
+            # HttpResponse("done")
         return HttpResponse("not hehe")
 
     else:
@@ -41,7 +43,7 @@ def form_view(request):
             return render(request, 'Quill.html', {'form': form})
         else:
             article = Article.objects.get(pk=id)
-            if not article.in_progress:
+            if not(article.in_progress):
                 form = QuillFieldForm(initial={'content': article.content})
                 article.in_progress = True
                 article.save()
