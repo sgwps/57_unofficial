@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
 from . import models
 from . import forms
 
@@ -24,12 +26,12 @@ class Login(View):
         ctx = {'login_form': Login.login_form(), 'error': ''}
 
         if login_form.is_valid():
-            cd = form.cleaned_data
+            cd = login_form.cleaned_data
             user = authenticate(username=cd['username'], password=cd['password'])
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('')
+                    return redirect('../')
                 else:
                     ctx['error'] = 'Disabled account'
                     return render(request, Login.template_name, ctx)

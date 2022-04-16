@@ -16,7 +16,12 @@
 
     <div class="content">
         {{ error }}
-        {{ login_form.as_ul }}
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ login_form.as_ul }}
+            <input type="submit" value="Войти">
+        </form>
         <p>Нет аккаунта? <a href="../signup">Зарегистрироваться</a></p>
     </div>
 
