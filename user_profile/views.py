@@ -64,7 +64,8 @@ class BasicRegistration(View):
                     if key[:8] == "subject_":
                         subjects.append(int(key[8:]))
                     if key[:15] == "another_subject":
-                        new_subjects.append(value.capitalize())
+                        if value.capitalize().len() != 0:
+                            new_subjects.append(value.capitalize())
                 result["teacher"] = {}
                 result["teacher"]["subjects"] = subjects
                 result["teacher"]["new_subjects"] = new_subjects
