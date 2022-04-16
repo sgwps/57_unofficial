@@ -8,6 +8,9 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(max_length=30, widget=forms.PasswordInput())
 
 
 class RegistrationForm(forms.Form):

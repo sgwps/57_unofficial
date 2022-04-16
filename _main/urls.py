@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 import user_profile.views
 from django.http import JsonResponse
+from django.views.generic import TemplateView
+
 
 def get_grades(request):
     print(request.GET['year'])
@@ -26,9 +28,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', user_profile.views.BasicRegistration.as_view()),
     path('signup2/', user_profile.views.su2),
+    path('login/', user_profile.views.Login.as_view()),
     path('get_grades/', user_profile.views.GetGrades),
     path('get_subjects', user_profile.views.GetSubjects),
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
-    path('get_specializations', user_profile.views.GetSpecializations)
+    path('get_specializations', user_profile.views.GetSpecializations),
+    path('', TemplateView.as_view(template_name="main.html"))
 ]

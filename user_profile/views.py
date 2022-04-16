@@ -1,11 +1,42 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+import json
+from django.http import HttpResponse 
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 from django.views import View
+from django.shortcuts import render
+from django.shortcuts import redirect
 from . import models
 from . import forms
-import json
-from django.contrib.auth.models import User
 
+
+class Login(View):
+    temlpate_name = 'login.html'
+    login_form = forms.LoginForm
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('../')
+        ctx = {'login_form': Login.login_form(), 'error': ''}
+        return render(request, Login.temlpate_name, ctx)
+
+    def post(self, request, *args, **kwargs):
+        login_form = Login.login_form(request.POST)
+        ctx = {'login_form': Login.login_form(), 'error': ''}
+
+        if login_form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('')
+                else:
+                    ctx['error'] = 'Disabled account'
+                    return render(request, Login.template_name, ctx)
+            else:
+                ctx['error'] = 'Invalid login'
+                return render(request, Login.template_name, ctx)
+        return render(request, Login.template_name, {'login_form': Login.login_form()})
 
 
 class BasicRegistration(View):
