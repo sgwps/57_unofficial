@@ -77,6 +77,8 @@ class BasicRegistration(View):
 
 
 
+def email_adding(request):
+    return render(request, 'email_confirm.html')
 
 
 def su2(request):

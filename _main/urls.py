@@ -30,5 +30,6 @@ urlpatterns = [
     path('get_subjects', user_profile.views.GetSubjects),
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
-    path('get_specializations', user_profile.views.GetSpecializations)
+    path('get_specializations', user_profile.views.GetSpecializations),
+    path('email_adding/', user_profile.views.email_adding),
 ]
