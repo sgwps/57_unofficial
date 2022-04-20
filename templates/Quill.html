@@ -30,35 +30,22 @@
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
-        const data = urlParams.get('id')
-        if (data != null){
-
-            let form = document.getElementById('form')
-            form.style.display = "none"
-
-            let url = `ws://${window.location.host}/ws/socket-server/`            
-            const chatSocket = new WebSocket(url)
-            
-
-            
-            chatSocket.onopen = function(){
-                chatSocket.onmessage = function (event) {
-                let m_data = JSON.parse(event.data)
-                console.log(m_data)
-                if(m_data.type === 'chat'){
-                if (m_data.message == data) {
-                    form.style.display = "block"
+        const id = urlParams.get('id')
+        if (id != null){
+        setInterval(function(){
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "/article_in_progress?id=" + id , true);
+            xhttp.timeout = 3000;
+            xhttp.onreadystatechange=function() {
+            if (xhttp.readyState === 4){  
+                if(xhttp.status != 200){  
+                alert("smt went wrong"); 
                 }
-                }           
-                };
-                chatSocket.send(JSON.stringify({
-                'id':data, 'user_id' : 5}));
+            } 
             }
-
-            $(form).submit(function() {
-                chatSocket.close(100)
-                return true; 
-            });
+            xhttp.send();
+        },
+        5000)
         }
 
 

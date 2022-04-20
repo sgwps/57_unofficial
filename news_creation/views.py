@@ -58,10 +58,19 @@ def form_view(request):
         else:
             article = Article.objects.get(pk=id)
             now = datetime.now(timezone.utc)
-            if article.editor == None and (article.time_flag == None or abs(article.time_flag - now).total_seconds() > 300):
+            print(abs(article.time_flag - now).total_seconds())
+            if article.time_flag == None or (abs(article.time_flag - now).total_seconds() > 40):
                 form = QuillFieldForm(initial={'content': article.content})
                 article.time_flag = datetime.now()
                 article.save()
                 return render(request, 'Quill.html', {'form': form})
             else:
                 return HttpResponse("this article is in work")
+
+
+def article_in_progess(request):
+    id = request.GET.get('id')
+    article = Article.objects.get(pk=id)
+    article.time_flag = datetime.now()
+    article.save()
+    return HttpResponse(status=200)

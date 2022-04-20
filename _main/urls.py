@@ -23,4 +23,5 @@ urlpatterns = [
     path('', main_page, name='Главная'),
     path('news_creation/', creation, name='Создание новости'),
     path('quill_test/', form_view, name="Quill"),
+    path('article_in_progress', article_in_progess)
 ]

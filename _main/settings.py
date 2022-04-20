@@ -39,14 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_quill',
     'news_creation',
-    'channels'
 ]
-
-CHANNEL_LAYERS = {
-    'default':{
-        'BACKEND':'channels.layers.InMemoryChannelLayer'
-    }
-}
 
 
 MIDDLEWARE = [
@@ -79,7 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = '_main.wsgi.application'
 
-ASGI_APPLICATION = "_main.asgi.application"
+ASGI_APPLICATION = ""
 
 
 # Database
