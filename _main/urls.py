@@ -18,17 +18,20 @@ from django.urls import path
 import user_profile.views
 from django.http import JsonResponse
 
+
 def get_grades(request):
     print(request.GET['year'])
     return JsonResponse({"А":123, "Б":124})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', user_profile.views.BasicRegistration.as_view()),
-    path('signup2/', user_profile.views.su2),
-    path('get_grades/', user_profile.views.GetGrades),
-    path('get_subjects', user_profile.views.GetSubjects),
-    path('check_username', user_profile.views.CheckUsename),
-    path('check_email', user_profile.views.CheckEmail),
-    path('get_specializations', user_profile.views.GetSpecializations)
+    path('signup/', user_profile.views.Registration.as_view()),
+    path('grades_api/', user_profile.views.GradesAPI.as_view())
+    #path('get_grades/', user_profile.views.GetGrades),
+    #path('signup2/', user_profile.views.su2),
+    #path('get_grades/', user_profile.views.GetGrades),
+    #path('get_subjects', user_profile.views.GetSubjects),
+    #path('check_username', user_profile.views.CheckUsename),
+    #path('check_email', user_profile.views.CheckEmail),
+    #path('get_specializations', user_profile.views.GetSpecializations)
 ]

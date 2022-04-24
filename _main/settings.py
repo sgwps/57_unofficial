@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news',
     'user_profile',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,4 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+AUTH_USER_MODEL = 'user_profile.User'
