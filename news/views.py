@@ -21,13 +21,13 @@ def news(request):
 
 def show_smth(request):
     content = Article.objects.all()
-    cnt = {}
+    cnt = []
     k=0
     for i in content:
         apendix = []
         soup = BeautifulSoup(i.content.html,'html.parser')
-        paragraph = soup.p
-        apendix.append(paragraph)
+        # paragraph = soup.p
+        # apendix.append(paragraph)
         image = soup.img
         apendix.append(image)
         header1 = soup.h1
@@ -40,11 +40,12 @@ def show_smth(request):
                 apendix.append(Header)
         else:
             apendix.append(header1)
-        cnt['apendix'+str(k)]=apendix
+        cnt.append(apendix)
         k += 1
     print(cnt)
-    print(content)
-    return render(request, 'test.html', {"content": content})
+    #print(content)
+
+    return render(request, 'test.html', {"content": cnt[::-1]})
 
 
 
