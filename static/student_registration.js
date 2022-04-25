@@ -60,6 +60,7 @@ function EndYearProcesing(data){
     if (grade.options.length == 2) {
         grade.style.display = "none";
         custom_grade.style.display = "block";
+        $(grade).val('other');
     }
 
     $(grade).change(function(){
