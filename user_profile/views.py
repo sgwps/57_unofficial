@@ -1,3 +1,4 @@
+from unicodedata import name
 from urllib import response
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -38,15 +39,24 @@ class Registration(View):
         if general_reg_form_post.is_valid():
             user = general_reg_form_post.save()
             student = None
-            if request.POST.get('is_student') == 'on':
+            if request.POST.get('is_student') == 'on' and student_reg_form_post.is_valid() and grade_form_post.is_valid():
                 user.is_student = True
-                student_reg_form_cleaned = student_reg_form_post.cleaned_data()
+                student_reg_form_cleaned = student_reg_form_post.cleaned_data
                 student_reg_form_cleaned['grade'] = request.POST.get('grade')
-                grade_form_cleaned = grade_form_post.cleaned_data()
+                grade_form_cleaned = grade_form_post.cleaned_data
                 
                 models.Student.create(user, student_reg_form_cleaned, grade_form_cleaned)
             if request.POST.get('is_teacher') == 'on': 
-                pass  
+                user.is_teacher = True
+                if teacher_reg_form_post.is_valid():
+                    subjects = list()
+                    for item in teacher_reg_form_post.cleaned_data.get("subjects"):
+                        subjects.append(item)
+                    for key in request.POST.keys():
+                        if key[:15] == "another_subject":
+                            subject_name = request.POST[key].capitalize()
+                            subjects.append(models.Subject.objects.get_or_create(name=subject_name)[0])
+                    models.Teacher.create(user, subjects)
             user.save 
             return HttpResponse("done")
         return HttpResponse("not hehe")
@@ -58,4 +68,3 @@ class GradesAPI(APIView):
     def get(self, request):
         year = request.GET['year']
         return Response(models.Grade.getGradesByYear(year))
-

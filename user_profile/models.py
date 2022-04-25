@@ -65,6 +65,9 @@ class Grade(models.Model):
     specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True, blank=True)
     letter = models.CharField(max_length=1, null=True, blank=True)
 
+
+    class Meta:
+        unique_together = ('graduation_year', 'letter',)
     
 
 
@@ -100,7 +103,7 @@ class Grade(models.Model):
             return Grade.objects.get_or_create(
                 graduation_year=year,
                 letter=grade_form.get('custom_grade_letter'),
-                specialization=Specialization.objects.filter(pk=grade_form.get('custom_specialization')),
+                specialization=Specialization.objects.filter(pk=grade_form.get('custom_specialization'))[0],
             )[0]
 
         else:
@@ -144,11 +147,7 @@ class Teacher(models.Model):
         teacher = Teacher()
         teacher.user = user
         subjects = data.get("subjects", tuple())
-        for subject_id in subjects:
-            teacher.subjects.add(subject.objects.get(pk=subject_id))
-        new_subjects = data.get("new_subjects", tuple())
-        for subject_name in new_subjects:
-            subject = subject.objects.get_or_create(name=subject_name)
+        for subject in subjects:
             teacher.subjects.add(subject)
         teacher.save()
 
