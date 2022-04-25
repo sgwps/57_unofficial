@@ -3,6 +3,7 @@ from datetime import datetime
 import email
 from enum import unique
 from pyexpat import model
+from unittest import result
 from django import forms
 from . import models
 from django.forms import ModelForm, ValidationError
@@ -29,8 +30,18 @@ def get_max_year():
     return date + 11
 
 
+def getLetterChoices():
+    letters_copy = models.letters.copy()
+    result = []
+    for i in letters_copy:
+        result.append((i, i))
+    result.append(('', ''))
+    return tuple(result)
+
+
+
 class CustomGradeForm(forms.Form):
-    custom_grade_letter = forms.ChoiceField(required=False, widget=forms.Select())
+    custom_grade_letter = forms.ChoiceField(required=False, widget=forms.Select(), choices=getLetterChoices())
     custom_specialization = forms.ChoiceField(required=False, choices=models.Specialization.getTuple)
 
 class StudentRegistrationForm(forms.Form):
@@ -40,16 +51,18 @@ class StudentRegistrationForm(forms.Form):
             'max':get_max_year()
         }
     ), min_value=1940, max_value=get_max_year(), required=False)
-    grade = forms.ChoiceField(required=False, widget=forms.Select())
 
 
 
+class TeacherRegistrationForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Teacher
+        fields = ['subjects']
 
 
+    subjects = forms.ModelMultipleChoiceField(
+        queryset=models.Subject.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
 
-
-
-
-
-class TeacherRegistrationForm(forms.Form):
-    subject = forms.ChoiceField(required=False, widget=forms.CheckboxSelectMultiple(attrs={'multiple':'multiple', 'id':'checkboxes_teacher_id'}))

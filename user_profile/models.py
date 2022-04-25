@@ -4,6 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
 
+letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н' ,'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я']
+
+
 def getAll(Model) -> dict:    #  for Subject, MediaPost, Specialization, Gender
     result = dict()
     model_list = Model.objects.all()
@@ -33,6 +36,10 @@ class Specialization(models.Model):
 class Subject(models.Model):
     name = models.CharField(max_length=40, null=True)
 
+    def __str__(self):
+        return self.name
+
+
 
 class MediaPost(models.Model):
     name = models.CharField(max_length=40, null=True)
@@ -55,46 +62,50 @@ class Gender(models.Model):  # ISO 5218
 
 class Grade(models.Model):
     graduation_year = models.IntegerField()
-    specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True)
-    letter = models.CharField(max_length=1, null=True, blank='True')
+    specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True, blank=True)
+    letter = models.CharField(max_length=1, null=True, blank=True)
 
     
 
 
     @staticmethod
     def getGradesByYear(year : int):
-        letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н' ,'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я']
+        letters_copy = letters.copy()
+
         result = list()
         grades_list = Grade.objects.filter(graduation_year=year)
         for grade in grades_list:
             if grade.letter != None:
                 specialization = grade.specialization
-                tuple = ((grade.id, grade.letter, str(grade.specialization)))
-                letters.remove(grade.letter)
+                tuple = (grade.id, (grade.letter, str(grade.specialization)))
+                letters_copy.remove(grade.letter)
                 result.append(tuple)
         res_dict = {
             "grades":result,
-            "letters":letters
+            "letters":letters_copy
         }
         return res_dict
 
 
     @staticmethod
-    def getGrade(data : dict):
-        if data.get('graduation_year') == None:
+    def getGrade(student_reg_form, grade_form):
+        print(student_reg_form, grade_form)
+        if student_reg_form.get('end_year') is None:
             return None
-        elif data.get('letter') == None:
-            return grade.objects.get_or_create(graduation_year=data['graduation_year'], letter=None)
-        elif data['letter'] != 'other':
-            return grade.objects.get(graduation_year=data['graduation_year'], letter=data['grade_letter'])
-        elif data.get('custom_grade') == None:
-            return grade.objects.get_or_create(graduation_year=data['graduation_year'], letter=None)
+        # year not none
+        year = student_reg_form.get('end_year')
+        if student_reg_form.get('grade', "") == '':
+            return Grade.objects.get_or_create(graduation_year=year, letter=None)[0]
+        elif student_reg_form.get('grade') == 'other':
+            return Grade.objects.get_or_create(
+                graduation_year=year,
+                letter=grade_form.get('custom_grade_letter'),
+                specialization=Specialization.objects.filter(pk=grade_form.get('custom_specialization')),
+            )[0]
+
         else:
-            grade = Grade()
-            grade.graduation_year = data['graduation_year']
-            grade.letter = data['custom_grade']['letter']
-            grade.specialization = Specialization.objects.get(name=data['grade']['specialization'])
-            return grade
+            print(int(student_reg_form.get('grade')))
+            return Grade.objects.filter(pk=int(student_reg_form.get('grade')))[0]
 
 
 
@@ -120,35 +131,17 @@ class User(AbstractUser):
     city = models.IntegerField(blank=True, null=True)
 
 
-    @staticmethod
-    def create(data : dict):  #data - json or dict??
-        user = user()
-        user.email = data["email"]
-        user.password = data["password"]
-        user.first_name = data["first_name"]
-        user.last_name = data["last_name"]
-        user.username = data["username"]
-        user.gender = Gender.objects.get(pk=int(data.get("gender")))
-        user.birthday = data.get("birthday")
-        user.save
-        if data.get('is_student') == True:
-            user.is_student = True
-            student.create(data.get('student', {}), user)
-        if data.get('is_teacher') == True:
-            user.is_teacher = True
-            teacher.create(data.get('teacher', {}), user)
-        user.save()
 
 
 
 
-class teacher(models.Model):
+class Teacher(models.Model):
     subjects = models.ManyToManyField(Subject)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher')
 
     @staticmethod
     def create(data : dict, user : User):
-        teacher = teacher()
+        teacher = Teacher()
         teacher.user = user
         subjects = data.get("subjects", tuple())
         for subject_id in subjects:
@@ -160,16 +153,18 @@ class teacher(models.Model):
         teacher.save()
 
 
-class student(models.Model):
+class Student(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student')
     grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='student', blank=True, null=True)
 
 
     @staticmethod
-    def create(data : dict, user : User):
-        student = student()
+    def create(user : User, student_reg_form, grade_form):
+        student = Student()
         student.user = user
-        grade = grade.getGrade(data)
+        user.is_student = True
+        user.save()
+        student.grade = Grade.getGrade(student_reg_form, grade_form)
         student.save()
 
 

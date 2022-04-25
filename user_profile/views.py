@@ -17,10 +17,12 @@ class Registration(View):
     general_reg_form = forms.BasicRegistrationForm
     student_reg_form = forms.StudentRegistrationForm
     grade_form = forms.CustomGradeForm
+    teacher_reg_form = forms.TeacherRegistrationForm
     context = {
         'general_reg_form': general_reg_form,
         'student_reg_form' : student_reg_form,
-        'grade_form' : grade_form
+        'grade_form' : grade_form,
+        'teacher_reg_form' : teacher_reg_form
     }
 
     def get(self, request, *args, **kwargs):
@@ -29,12 +31,48 @@ class Registration(View):
 
     def post(self, request, *args, **kwargs):
         general_reg_form_post = Registration.general_reg_form(request.POST)
+        student_reg_form_post = Registration.student_reg_form(request.POST)
+        grade_form_post = Registration.grade_form(request.POST)
+        teacher_reg_form_post = Registration.teacher_reg_form(request.POST)
+        print(student_reg_form_post)
+
+        if general_reg_form_post is None:
+            general_reg_form_post = Registration.general_reg_form
+        if student_reg_form_post is None:
+            student_reg_form_post = Registration.student_reg_form
+        if grade_form_post is None:
+            grade_form_post = Registration.grade_form
+        if teacher_reg_form_post is None:
+            teacher_reg_form_post = Registration.teacher_reg_form
+        post_error_context = {
+                    'general_reg_form' : general_reg_form_post,
+                    'student_reg_form' : student_reg_form_post,
+                    'grade_form' : grade_form_post,
+                    'teacher_reg_form' : teacher_reg_form_post
+                }
         if general_reg_form_post.is_valid():
             user = general_reg_form_post.save()
+            student = None
+            if request.POST.get('is_student') == 'on':
+                user.is_student = True
+                student_reg_form_cleaned = dict()
+                grade_form_cleaned = dict()
+                try:
+                    student_reg_form_cleaned = student_reg_form_post.cleaned_data
+                    student_reg_form_cleaned['grade'] = request.POST.get('grade')
+                except:
+                    pass
+
+                try:
+                    grade_form_cleaned = grade_form_post.cleaned_data
+                except:
+                    pass
+
+                models.Student.create(user, student_reg_form_cleaned, grade_form_cleaned)
+            if request.POST.get('is_teacher') == 'on': 
+                pass  
+            user.save 
             return HttpResponse("done")
-        post_error_context = {
-            'general_reg_form' : general_reg_form_post
-        }
         return render(request, Registration.template_name, context=post_error_context)
 
 

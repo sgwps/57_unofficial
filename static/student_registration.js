@@ -5,10 +5,12 @@ var end_year = document.getElementById("id_end_year");
 var grade = document.getElementById("id_grade")
 var custom_grade_letter = document.getElementById("id_custom_grade_letter");
 var custom_specialization = document.getElementById("id_custom_specialization")
+var submiit_button = document.getElementById("id_submit")
 
 
 student_reg_list.style.display = "none";
 custom_grade.style.display = "none";
+
 
 student_reg_checkbox.addEventListener("change", function(){
     if (student_reg_checkbox.checked){
@@ -16,54 +18,58 @@ student_reg_checkbox.addEventListener("change", function(){
     }
     else{
         student_reg_list.style.display = "none";
-        custom_grade_letter.attributes.required = false;
-        custom_specialization.attributes.required = false;
+        submiit_button.disabled = false;
     }
 });
 
+
 function check_end_year(){
     try{
-    if (end_year.min <= $(end_year).val() && end_year.max >= $(end_year).val()){
-        return true;
-    }
-    else{
-        return false;
-    }
+        if (end_year.min <= $(end_year).val() && end_year.max >= $(end_year).val()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     catch{
-    return false;
+        return false;
     }
 }
 
 
 function EndYearProcesing(data){
     $(grade).empty()
-    $(grade).append("<option value=''></option>");
+    submiit_button.disabled = false;
+    $(grade).append("<option></option>");
+
+
     $.each(data["grades"], function(i, val) {
-        $(grade).append("<option value='" + i + "'>" + val[0] + " : " + val[1] + "</option>");
+        $(grade).append("<option value='" + val[0] + "'>" + val[1][0] + " : " + val[1][1] + "</option>");
     });
+
     $(custom_grade_letter).append("<option value=''></option>");
     for (const i of data["letters"]) {
     $(custom_grade_letter).append("<option value='" + i + "'>" + i + "</option>");
     }
-    if (custom_grade_letter.options.length != 0) {
+    if (custom_grade_letter.options.length > 1) {
     $(grade).append("<option id='other_letter' value='other'>other</option>");
     }
+
+
     if (grade.options.length == 2) {
         grade.style.display = "none";
         custom_grade.style.display = "block";
     }
+
     $(grade).change(function(){
     var selected = $('option:selected', this).attr('id')
     if (selected == 'other_letter'){
-        custom_grade.style.display = "block";
-        $(custom_specialization).attr('required', 'required');            
-        $(custom_grade_letter).attr('required', 'required');            
+        custom_grade.style.display = "block";          
     }
     else{
         custom_grade.style.display = "none";
-        $(custom_profile).removeAttr('required');
-        $(custom_grade_letter).removeAttr('required');  
+        submiit_button.disabled = false;  
     }
     });
 }
@@ -95,25 +101,25 @@ end_year.addEventListener(
 });
 
 function check_grade_form(){
-    if ($(custom_grade_letter).val() != "" && $(custom_profile).val() == "") {
-    
+
+    if ($(custom_grade_letter).val() != "" && $(custom_specialization).val() == 0) {
+        submiit_button.disabled = true;
     }
 
-    else if ($(custom_grade_letter).val() == "" && $(custom_profile).val() != ""){
-
+    else if ($(custom_grade_letter).val() == "" && $(custom_specialization).val() != 0){
+        submiit_button.disabled = true;
     }
-
     else{
-        
+        submiit_button.disabled = false;
     }
     
 }
 
 
 custom_grade_letter.addEventListener(
-    "change", check_grade_form()
+    "change", check_grade_form
 );
 
-custom_profile.addEventListener(
-    "change", check_grade_form()
+custom_specialization.addEventListener(
+    "change", check_grade_form
 );
