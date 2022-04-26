@@ -25,18 +25,16 @@
                 
                 <input type="checkbox" name="is_student" id="student-registration-checkbox">I'm a student</input>
                 <div id="student-registration">
-                    <ul>
                         {{ student_reg_form.as_ul }}
-                        <li>
-                            <label for="id_grade">Grade:</label>
-                            <select name="grade" id="id_grade">
-                            </select>
-                        </li>
-                    </ul>
-                    <li id="custom-grade">
-                        {{ grade_form }}
-                    </li>
-                </div>
+                        <div id="grade_block">
+                        <label for="id_grade">Grade:</label>
+                        <select name="grade" id="id_grade">
+                        </select>
+                        </div>
+                        <div id="custom-grade">
+                            {{ grade_form }}
+                        </div>
+                        </div>
 
                 <br>
                 <input type="checkbox" id="teacher-registration-checkbox" name="is_teacher">I'm a teacher</input>

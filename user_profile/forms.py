@@ -5,6 +5,7 @@ from enum import unique
 from pyexpat import model
 from unittest import result
 from django import forms
+from pkg_resources import require
 from . import models
 from django.forms import ModelForm, ValidationError
 from django.contrib.auth.models import User
@@ -63,6 +64,7 @@ class TeacherRegistrationForm(forms.ModelForm):
 
     subjects = forms.ModelMultipleChoiceField(
         queryset=models.Subject.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
 

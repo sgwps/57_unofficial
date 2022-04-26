@@ -143,12 +143,13 @@ class Teacher(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher')
 
     @staticmethod
-    def create(data : dict, user : User):
+    def create(user : User, subjects : list):
         teacher = Teacher()
         teacher.user = user
-        subjects = data.get("subjects", tuple())
+        teacher.save()
         for subject in subjects:
             teacher.subjects.add(subject)
+            print("sub", subject)
         teacher.save()
 
 

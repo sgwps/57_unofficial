@@ -6,6 +6,7 @@ var grade = document.getElementById("id_grade")
 var custom_grade_letter = document.getElementById("id_custom_grade_letter");
 var custom_specialization = document.getElementById("id_custom_specialization")
 var submiit_button = document.getElementById("id_submit")
+var grade_block = document.getElementById("grade_block")
 
 
 student_reg_list.style.display = "none";
@@ -40,6 +41,7 @@ function check_end_year(){
 
 function EndYearProcesing(data){
     $(grade).empty()
+    $(custom_grade_letter).empty()
     submiit_button.disabled = false;
     $(grade).append("<option></option>");
 
@@ -58,11 +60,14 @@ function EndYearProcesing(data){
 
 
     if (grade.options.length == 2) {
-        grade.style.display = "none";
+        grade_block.style.display = "none";
         custom_grade.style.display = "block";
         $(grade).val('other');
     }
-
+    else{
+        grade_block.style.display = "block";
+        custom_grade.style.display = "none";
+    }
     $(grade).change(function(){
     var selected = $('option:selected', this).attr('id')
     if (selected == 'other_letter'){
@@ -92,11 +97,13 @@ end_year.addEventListener(
         .done(function(data){
             EndYearProcesing(data);
         });
-        grade.style.display = "block"
+        submiit_button.disabled = false;  
 
     }
     else{
-        alert("Enter a valid graduation year")  //делать красную подстветку
+        alert("Enter a valid graduation year");  //делать красную подстветку
+        submiit_button.disabled = true;  
+
     }
 
 });
