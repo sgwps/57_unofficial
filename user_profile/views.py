@@ -39,7 +39,7 @@ class Registration(View):
         if general_reg_form_post.is_valid():
             user = general_reg_form_post.save()
             student = None
-            if request.POST.get('is_student') == 'on'
+            if request.POST.get('is_student') == 'on':
                 if student_reg_form_post.is_valid() and grade_form_post.is_valid():
                     user.is_student = True
                     student_reg_form_cleaned = student_reg_form_post.cleaned_data
