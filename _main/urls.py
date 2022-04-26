@@ -21,7 +21,7 @@ from news_creation.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_page, name='Главная'),
-    path('news_creation/', creation, name='Создание новости'),
-    path('quill_test/', form_view, name="Quill"),
-    path('article_in_progress', article_in_progess)
+    path('quill_test/', QuillView.as_view(), name="Quill"),
+    path('article_in_progress', ArtcleWorkAPI.as_view()),
+    path('publish', NewsPublication.as_view())
 ]

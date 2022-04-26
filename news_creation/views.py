@@ -1,38 +1,28 @@
 from distutils.command.upload import upload
 from email.policy import default
+from multiprocessing import get_context
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views import View
 from news_creation.forms import NewsCreationForm
 from news_creation.forms import QuillFieldForm
 from news_creation.models import Article
 from datetime import datetime, timezone, timedelta
+from rest_framework.views import APIView
+from news import models as NewsModels
 # Create your views here.
 
-def creation(request):
-    form_valid = True
-    
-    if request.method == 'POST':
-        f = NewsCreationForm(request.POST)
-        if f.is_valid:
-            pass
-        else:
-            form_valid = False
-    else:
-        f = NewsCreationForm()
-    
-    ctx = {
-        'form': f,
-        'form_valid': form_valid
+
+class QuillView(View):
+    template_name = 'Quill.html'
+    form = QuillFieldForm
+    context = {
+        'form' : QuillFieldForm,
+        'publishing_allowed' : True
     }
-    
-    return render(request, 'news_creation.html', context = ctx)
 
-
-def form_view(request):
-    
-    if request.method == "POST":
-        form = QuillFieldForm(request.POST)
-        print('POST:', request.GET.get('id', default=0))
+    def post(self, request, *args, **kwargs):
+        form = QuillView.form(request.POST)
         if form.is_valid():
             id = request.GET.get('id', default=0)
             if id == 0:
@@ -49,28 +39,44 @@ def form_view(request):
             return HttpResponse("done")
         return HttpResponse("not hehe")
 
-    else:
-        print(request.GET)
+
+    def get(self, request, *args, **kwargs):
         id = request.GET.get('id', default=0)
         if id == 0:
             form = QuillFieldForm()
-            return render(request, 'Quill.html', {'form': form})
+            return render(request, QuillView.template_name, QuillView.context)
         else:
             article = Article.objects.get(pk=id)
             now = datetime.now(timezone.utc)
-            print(abs(article.time_flag - now).total_seconds())
             if article.time_flag == None or (abs(article.time_flag - now).total_seconds() > 40):
-                form = QuillFieldForm(initial={'content': article.content})
+                get_context = QuillView.context
+                get_context['form'] = QuillFieldForm(initial={'content': article.content})
                 article.time_flag = datetime.now()
                 article.save()
-                return render(request, 'Quill.html', {'form': form})
+                return render(request, QuillView.template_name, get_context)
             else:
                 return HttpResponse("this article is in work")
 
 
-def article_in_progess(request):
-    id = request.GET.get('id')
-    article = Article.objects.get(pk=id)
-    article.time_flag = datetime.now()
-    article.save()
-    return HttpResponse(status=200)
+class ArtcleWorkAPI(APIView):
+
+    def get(self, request):
+        id = request.GET.get('id')
+        article = Article.objects.get(pk=id)
+        article.time_flag = datetime.now()
+        article.save()
+        return HttpResponse(status=200)
+
+class NewsPublication(View):
+    form = QuillFieldForm
+
+    def post(self, request, *args, **kwargs):
+        form_post = NewsPublication.form(request.POST)
+        if form_post.is_valid():
+            new_article = NewsModels.Publication(
+                content = form_post.cleaned_data['content'],
+                is_article = True,
+                date_created=datetime.now()
+            )
+            new_article.save()
+            return HttpResponse("published")
