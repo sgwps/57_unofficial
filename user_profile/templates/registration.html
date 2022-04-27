@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="utf-8">
     <title>Медиа 57:: регистрация</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'reg/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 
 
@@ -15,51 +16,54 @@
         <div id="registration-forms">
             <form method="post">
                 {% csrf_token %}
+
                 <div id="general-registration">
                     <ul>
                         {{ general_reg_form.as_ul }}
                     </ul>
                 </div>
-                <!--<div id="student-registration">
-                    <input type="checkbox" id="student-registration-form">
-                    <ul id="student_reg_list">
+                
+                <input type="checkbox" name="is_student" id="student-registration-checkbox">I'm a student</input>
+                <div id="student-registration">
                         {{ student_reg_form.as_ul }}
-                        <li id="custom_profile_li">
-                            {{custom_profile_form}}
-                        </li>
-                    </ul>
-                </div>
+                        <div id="grade_block">
+                        <label for="id_grade">Grade:</label>
+                        <select name="grade" id="id_grade">
+                        </select>
+                        </div>
+                        <div id="custom-grade">
+                            {{ grade_form }}
+                        </div>
+                        </div>
+
+                <br>
+                <input type="checkbox" id="teacher-registration-checkbox" name="is_teacher">I'm a teacher</input>
+
+
+
                 <div id="teacher-registration">
-                    <input type="checkbox" id="teacher-registration-form">
                     <ul id="teacher_reg_list">
-                        <form>
-                            <div class="multiselect">
-                              <div class="selectBox" onclick="showCheckboxes()">
-                                <select>
-                                  <option>Subject</option>
-                                </select>
-                                <div class="overSelect"></div>
-                              </div>
-                              
-                              <div id="checkboxes_teacher_id">
-                              </div>
-                            </div>
-                        </form>
-                        <div id="other_subjects"></div>
-                        <button type="button" onclick="AddAnotherSubject()">Another subject</button> 
+                        {{ teacher_reg_form }}
+
+                        <ul id="other_subjects"></ul>
+                        <button type="button" id="id_another_subject_button">Another subject</button> 
                         
                     </ul>
 
-                </div>-->
-                <input type="submit" value="Зарегистрироваться">
+                </div>
+                <br>
+                <input id="id_submit" type="submit" value="Зарегистрироваться">
+
+
             </form>
         </div>
     </div>
     <div class="footer"></div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {% load static %}
-    <script src="{% static 'registration.js' %}"> </script>
-    <script src="{% static 'reg/app.js' %}"></script> 
+    <script src="{% static 'student_registration.js' %}"> </script>
+    <script src="{% static 'teacher_registration.js' %}"> </script>
+
 </body>
+
 </html>
