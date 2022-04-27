@@ -1,4 +1,7 @@
+from email import message
 import json
+from multiprocessing import context
+from re import template
 from django.http import HttpResponse 
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -6,11 +9,12 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from . import models
 from . import forms
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib import messages
 
 
 class Login(View):
@@ -108,3 +112,17 @@ class GradesAPI(APIView):
     def get(self, request):
         year = request.GET['year']
         return Response(models.Grade.getGradesByYear(year))
+    
+    
+class Profile(View):
+    template_name = 'profile_page.html'
+    context = {}
+    def get(self, request, *args, **kwargs):
+        return render(request, Profile.template_name, Profile.context)
+    
+    
+    
+def logout_page(request):
+    logout(request)
+    messages.add_message(request, messages.INFO, "Вы успешно вышли из аккаунта")
+    return redirect('index')
