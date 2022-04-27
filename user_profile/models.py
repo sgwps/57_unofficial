@@ -127,11 +127,13 @@ class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
     is_media_staff = models.BooleanField(default=False)
-    gender = models.ForeignKey(to=Gender, on_delete=models.PROTECT, related_name='users', default=3)
+    gender = models.ForeignKey(to=Gender, on_delete=models.PROTECT, related_name='users', default=0)
     is_confirmed = models.BooleanField(default=False)
     bio = models.CharField(blank=True, max_length=1000)
     birthday = models.DateField(blank=True, null=True)
     city = models.IntegerField(blank=True, null=True)
+
+
 
 
 
