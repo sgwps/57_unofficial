@@ -33,5 +33,6 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="main.html")),
     path('quill_test/', news_creation.views.QuillView.as_view(), name="Quill"),
     path('article_in_progress', news_creation.views.ArtcleWorkAPI.as_view()),
-    path('publish', news_creation.views.NewsPublication.as_view())
+    path('publish', news_creation.views.NewsPublication.as_view()),
+    path('moderation_invite', user_profile.views.ModerationInvite.as_view())
 ]

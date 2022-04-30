@@ -1,4 +1,5 @@
 import json
+from re import template
 from django.http import HttpResponse 
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -72,6 +73,10 @@ class Registration(View):
         if general_reg_form_post.is_valid():
             user = general_reg_form_post.save(commit=False)
             user.set_password(general_reg_form_post.cleaned_data["password"])
+            if models.UnregisterdUser.objects.filter(email=user.email).exists():
+                user.is_confirmed = True
+                models.UnregisterdUser.objects.filter(email=user.email).delete()
+
             user.save()
             student = None
             if request.POST.get('is_student') == 'on':
@@ -108,3 +113,20 @@ class GradesAPI(APIView):
     def get(self, request):
         year = request.GET['year']
         return Response(models.Grade.getGradesByYear(year))
+
+
+class ModerationInvite(View):
+    template_name = 'email_confirm.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, ModerationInvite.template_name)
+
+
+    def post(self, request, *args, **kwargs):
+        for key in request.POST.keys():
+            if key[:13] == 'another_email':
+                email = request.POST[key]
+                new_user = models.UnregisterdUser.objects.get_or_create(email=email)
+                new_user.save()
+        return redirect('../')
+ 

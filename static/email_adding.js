@@ -7,7 +7,7 @@ function AddAnotherEmail(){
         var email_list = document.getElementById("add_email")
         var li = document.createElement("li");
         var inp = document.createElement("input");
-        inp.setAttribute("type", "text");
+        inp.setAttribute("type", "email");
         inp.setAttribute("name", "another_email" + len_emails);
         inp.setAttribute("id", "another_subject" + len_emails);
         inp.addEventListener("change", function(){

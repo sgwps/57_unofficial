@@ -179,3 +179,8 @@ class Manager(models.Model):
 class MediaStaff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     post = models.ForeignKey(MediaPost, on_delete=models.PROTECT)
+
+
+class UnregisterdUser(models.Model):
+    email = models.EmailField()
+
