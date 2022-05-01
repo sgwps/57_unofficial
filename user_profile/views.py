@@ -1,4 +1,5 @@
 import json
+from multiprocessing import get_context
 from re import template
 from django.http import HttpResponse 
 from django.http import JsonResponse
@@ -130,3 +131,21 @@ class ModerationInvite(View):
                 new_user.save()
         return redirect('../')
  
+
+class ChangeData(View):
+
+    template_name = 'change_profile.html'
+    general_reg_form = forms.ChangeRegistrationData
+    context = {
+        'basic_profile': general_reg_form,
+        'student_data' : None
+    }
+
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            context_get = ChangeData.context
+            context_get['basic_profile'] = forms.ChangeRegistrationData(instance=request.user)
+            if request.user.is_student == True:
+                student = models.Student.objects.get(user=request.user)
+            return render(request, ChangeData.template_name, context=context_get)

@@ -25,6 +25,15 @@ class BasicRegistrationForm(ModelForm):
         }
         
 
+class ChangeRegistrationData(ModelForm):
+
+    class Meta:
+        model = models.User
+        fields = ['first_name', 'last_name', 'username', 'birthday', 'gender', 'is_student', 'is_teacher']
+        widgets = {
+            'birthday': forms.DateInput(format=('%Y-%m-%d'), 
+            attrs={'type': 'date'}),
+        }
 
 
 
