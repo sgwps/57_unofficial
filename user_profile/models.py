@@ -22,7 +22,6 @@ class Specialization(models.Model):
     def __str__(self):
         return self.name
 
-
     @staticmethod
     def getTuple() -> tuple:
         objects = Specialization.objects.all()
@@ -51,6 +50,7 @@ class Gender(models.Model):  # ISO 5218
     INSERT INTO user_profile_gender (id, gender) VALUES (0, "not known");
     INSERT INTO user_profile_gender (id, gender) VALUES (1, "male");
     INSERT INTO user_profile_gender (id, gender) VALUES (2, "female");
+    #
     INSERT INTO user_profile_gender (id, gender) VALUES (9, "not applicable");
     '''
     id = models.IntegerField(primary_key=True)
@@ -65,11 +65,8 @@ class Grade(models.Model):
     specialization = models.ForeignKey(to=Specialization, on_delete=models.PROTECT, related_name='grades', null=True, blank=True)
     letter = models.CharField(max_length=1, null=True, blank=True)
 
-
     class Meta:
         unique_together = ('graduation_year', 'letter',)
-    
-
 
     @staticmethod
     def getGradesByYear(year : int):
@@ -88,7 +85,6 @@ class Grade(models.Model):
             "letters":letters_copy
         }
         return res_dict
-
 
     @staticmethod
     def getGrade(student_reg_form, grade_form):
@@ -113,11 +109,6 @@ class Grade(models.Model):
 
 
 
-
-
-
-
-
 class User(AbstractUser):
     first_name = models.CharField(max_length=100, blank=False, null=False)
     last_name = models.CharField(max_length=100, blank=False, null=False)
@@ -132,10 +123,6 @@ class User(AbstractUser):
     bio = models.CharField(blank=True, max_length=1000)
     birthday = models.DateField(blank=True, null=True)
     city = models.IntegerField(blank=True, null=True)
-
-
-
-
 
 
 
@@ -170,7 +157,6 @@ class Student(models.Model):
         student.save()
 
 
-
 class Manager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     post = models.CharField(max_length=50, blank=True)
@@ -179,3 +165,5 @@ class Manager(models.Model):
 class MediaStaff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     post = models.ForeignKey(MediaPost, on_delete=models.PROTECT)
+
+

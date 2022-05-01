@@ -25,9 +25,6 @@ class BasicRegistrationForm(ModelForm):
         }
         
 
-
-
-
 def get_max_year():
     date = datetime.now().year
     return date + 11
@@ -42,10 +39,10 @@ def getLetterChoices():
     return tuple(result)
 
 
-
 class CustomGradeForm(forms.Form):
     custom_grade_letter = forms.ChoiceField(required=False, widget=forms.Select(), choices=getLetterChoices())
     custom_specialization = forms.ChoiceField(required=False, choices=models.Specialization.getTuple)
+
 
 class StudentRegistrationForm(forms.Form):
     end_year = forms.IntegerField(widget = forms.NumberInput(
@@ -56,13 +53,11 @@ class StudentRegistrationForm(forms.Form):
     ), min_value=1940, max_value=get_max_year(), required=False)
 
 
-
 class TeacherRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = models.Teacher
         fields = ['subjects']
-
 
     subjects = forms.ModelMultipleChoiceField(
         queryset=models.Subject.objects.all(),
