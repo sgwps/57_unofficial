@@ -131,16 +131,16 @@ def signup(request, user):
         # email = form.cleaned_data.get('email')
         current_site = get_current_site(request)
         mail_subject = 'Activate your account.'
-        message = render_to_string('templates/new_email.html', {
+        message = render_to_string('new_email.html', {
                             'user': user,
                             'domain': current_site.domain,
                             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                             'token': account_activation_token.make_token(user),
                         })
         # to_email = form.cleaned_data.get('email')
-        send_mail(subject=mail_subject, body=message,
-                  from_email=settings.EMAIL_FROM_USER,
-                  to=[user.email])
+        send_mail(mail_subject, message,
+                  settings.EMAIL_FROM_USER,
+                  [user.email])
         print('b')
         return HttpResponse('Please confirm your email address to complete the registration')
 

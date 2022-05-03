@@ -144,7 +144,7 @@ AUTH_USER_MODEL = 'user_profile.User'
 
 
 # EMAIL CONFIG
-
+# SMTPServerDisconnected at /signup/
 EMAIL_FROM_USER = ''
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
