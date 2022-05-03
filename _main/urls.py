@@ -35,5 +35,7 @@ urlpatterns = [
     path('article_in_progress', news_creation.views.ArtcleWorkAPI.as_view()),
     path('publish', news_creation.views.NewsPublication.as_view()),
     path('moderation_invite', user_profile.views.ModerationInvite.as_view()),
-    path('change_user_data', user_profile.views.ChangeData.as_view())
+    path('change_user_data', user_profile.views.ChangeData.as_view()),
+    path('check_username', user_profile.views.CheckUsename),
+    path('check_email', user_profile.views.CheckEmail),
 ]

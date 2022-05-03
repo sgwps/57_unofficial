@@ -209,3 +209,21 @@ class ChangeData(View):
             return HttpResponse("done")
         print(general_reg_form_post.errors)
         return HttpResponse("not hehe")
+
+
+def CheckUsename(request):
+    username = request.GET['username']
+    print(username)
+    result = {'result':True}
+    if models.User.objects.filter(username=username).exists() and username != "":
+        result['result'] = False
+    return JsonResponse(result)
+
+
+def CheckEmail(request):
+    email = request.GET['email']
+    result = {'result':True}
+    print(email)
+    if models.User.objects.filter(email=email).exists() and email != "":
+        result['result'] = False
+    return JsonResponse(result)
