@@ -16,9 +16,10 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from .tokens import account_activation_token
-from django.core.mail import send_mail
-from django.utils.encoding import force_bytes
+from django.core.mail import send_mail, EmailMessage
+from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
+from django.conf import settings
 
 
 
@@ -110,7 +111,8 @@ class Registration(View):
             user.save()
             # EMAIL
             if not user.is_active:
-                return signup(request)
+                return signup(request, user)
+                print('a')
 
             return HttpResponse("done")
         return HttpResponse("not hehe")
@@ -124,30 +126,29 @@ class GradesAPI(APIView):
         return Response(models.Grade.getGradesByYear(year))
 
 
-def signup(request):
-    User = get_user_model()
-    if request.method == 'POST':
+def signup(request, user):
         form = forms.BasicRegistrationForm(request.POST)
-        email = form.cleaned_data.get('email')
-        if User.objects.filter(email__iexact=email).count() == 1:
-                user = form.save(commit=False)
-                current_site = get_current_site(request)
-                mail_subject = 'Activate your account.'
-                message = render_to_string('email_template.html', {
+        # email = form.cleaned_data.get('email')
+        current_site = get_current_site(request)
+        mail_subject = 'Activate your account.'
+        message = render_to_string('templates/new_email.html', {
                             'user': user,
                             'domain': current_site.domain,
                             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                             'token': account_activation_token.make_token(user),
                         })
-                to_email = form.cleaned_data.get('email')
-                send_mail(mail_subject, message, 'youremail', [to_email])
-                return HttpResponse('Please confirm your email address to complete the registration')
+        # to_email = form.cleaned_data.get('email')
+        send_mail(subject=mail_subject, body=message,
+                  from_email=settings.EMAIL_FROM_USER,
+                  to=[user.email])
+        print('b')
+        return HttpResponse('Please confirm your email address to complete the registration')
 
-"""
+
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
@@ -157,4 +158,3 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
-"""

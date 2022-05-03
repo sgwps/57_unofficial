@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user_profile',
     'news_creation',
     'django_quill',
+    'six',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,14 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'user_profile.User'
+
+
+# EMAIL CONFIG
+
+EMAIL_FROM_USER = ''
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+
