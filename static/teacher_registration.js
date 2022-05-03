@@ -1,4 +1,4 @@
-var teacher_reg_checkbox = document.getElementById("teacher-registration-checkbox");
+var teacher_reg_checkbox = document.getElementById("id_is_teacher");
 var teacher_reg_list = document.getElementById("teacher-registration")
 var another_subject_button = document.getElementById("id_another_subject_button")
 var other_subjects = document.getElementById("other_subjects")

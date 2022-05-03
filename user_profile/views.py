@@ -136,8 +136,14 @@ class ChangeData(View):
 
     template_name = 'change_profile.html'
     general_reg_form = forms.ChangeRegistrationData
+    student_reg_form = forms.StudentRegistrationForm
+    grade_form = forms.CustomGradeForm
+    teacher_reg_form = forms.TeacherRegistrationForm
     context = {
         'basic_profile': general_reg_form,
+        'student_reg_form' : student_reg_form,
+        'grade_form' : grade_form,
+        'teacher_reg_form' : teacher_reg_form,
         'student_data' : None
     }
 
@@ -148,4 +154,58 @@ class ChangeData(View):
             context_get['basic_profile'] = forms.ChangeRegistrationData(instance=request.user)
             if request.user.is_student == True:
                 student = models.Student.objects.get(user=request.user)
+                grade = student.grade
+                if grade != None:
+                    context_get['end_year'] = grade.graduation_year
+                    context_get['grade'] = grade.id
+
+            if request.user.is_teacher == True:
+                teacher = models.Teacher.objects.get(user=request.user)
+                context_get['teacher_reg_form'] = forms.TeacherRegistrationForm(instance=teacher)
             return render(request, ChangeData.template_name, context=context_get)
+
+
+    def post(self, request, *args, **kwargs):
+        general_reg_form_post = ChangeData.general_reg_form(request.POST, instance=request.user)
+        student_reg_form_post = ChangeData.student_reg_form(request.POST)
+        grade_form_post = ChangeData.grade_form(request.POST)
+        teacher_reg_form_post = ChangeData.teacher_reg_form(request.POST)
+        # collect form for error
+
+        if general_reg_form_post.is_valid():
+            user = general_reg_form_post.save()
+            if user.is_student == True:
+                if student_reg_form_post.is_valid() and grade_form_post.is_valid():
+                    student_reg_form_cleaned = student_reg_form_post.cleaned_data
+                    student_reg_form_cleaned['grade'] = request.POST.get('grade')
+                    grade_form_cleaned = grade_form_post.cleaned_data
+                    grade = models.Grade.getGrade(student_reg_form_cleaned, grade_form_cleaned)
+                    student = models.Student.objects.get_or_create(user=user)[0]
+                    student.grade = grade
+                    student.save()
+                else:
+                    return HttpResponse("error")
+            else:
+                models.Student.objects.filter(user=user).delete()
+            if user.is_teacher == True: 
+                if teacher_reg_form_post.is_valid():
+                    subjects = list()
+                    for item in teacher_reg_form_post.cleaned_data.get("subjects"):
+                        subjects.append(item)
+                    for key in request.POST.keys():
+                        if key[:15] == "another_subject":
+                            subject_name = request.POST[key].capitalize()
+                            if len(subject_name) != 0:
+                                subjects.append(models.Subject.objects.get_or_create(name=subject_name)[0])
+                    teacher = models.Teacher.objects.get_or_create(user=user)[0]
+                    teacher.subjects.clear()
+                    teacher.subjects.add(*subjects)
+                else:
+                    return HttpResponse("error")
+            else:
+                models.Teacher.objects.filter(user=user).delete()
+
+            user.save() 
+            return HttpResponse("done")
+        print(general_reg_form_post.errors)
+        return HttpResponse("not hehe")

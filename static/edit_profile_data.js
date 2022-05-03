@@ -1,3 +1,4 @@
+
 var student_reg_checkbox = document.getElementById("id_is_student");
 var student_reg_list = document.getElementById("student-registration")
 var custom_grade = document.getElementById("custom-grade");
@@ -8,45 +9,23 @@ var custom_specialization = document.getElementById("id_custom_specialization")
 var submiit_button = document.getElementById("id_submit")
 var grade_block = document.getElementById("grade_block")
 
-student_reg_list.style.display = "none";
-custom_grade.style.display = "none";
-
-
-student_reg_checkbox.addEventListener("change", function(){
-    if (student_reg_checkbox.checked){
-        student_reg_list.style.display = "block";
-    }
-    else{
-        student_reg_list.style.display = "none";
-        submiit_button.disabled = false;
-    }
-});
-
-
-function check_end_year(){
-    try{
-        if (end_year.min <= $(end_year).val() && end_year.max >= $(end_year).val()){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    catch{
-        return false;
-    }
-}
-
 
 function EndYearProcesing(data){
     $(grade).empty()
     $(custom_grade_letter).empty()
     submiit_button.disabled = false;
-    $(grade).append("<option></option>");
+    $(grade).append("<option value=''></option>");
 
 
     $.each(data["grades"], function(i, val) {
-        $(grade).append("<option value='" + val[0] + "'>" + val[1][0] + " : " + val[1][1] + "</option>");
+        let valueOption = document.createElement("option")
+        valueOption.innerHTML = val[1][0] + " : " + val[1][1]
+        valueOption.value = val[0]
+        console.log(val[0], grade_val)
+        if (val[0] == grade_val) {
+            valueOption.selected=true;
+        }
+        grade.appendChild(valueOption)
     });
 
     $(custom_grade_letter).append("<option value=''></option>");
@@ -79,7 +58,6 @@ function EndYearProcesing(data){
     });
 }
 
-
 function checkEndYear(){
     if ($(end_year).val() == ""){
         custom_grade.style.display = "none";
@@ -103,31 +81,34 @@ function checkEndYear(){
 
     }
 
+
+
 }
 
-end_year.addEventListener(
-    "change", checkEndYear);
-
-function check_grade_form(){
-
-    if ($(custom_grade_letter).val() != "" && $(custom_specialization).val() == 0) {
-        submiit_button.disabled = true;
+function check_end_year(){
+    try{
+        if (end_year.min <= $(end_year).val() && end_year.max >= $(end_year).val()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
+    catch{
+        return false;
+    }
+}
 
-    else if ($(custom_grade_letter).val() == "" && $(custom_specialization).val() != 0){
-        submiit_button.disabled = true;
-    }
-    else{
-        submiit_button.disabled = false;
-    }
-    
+custom_grade.style.display = "none";
+
+if (student_reg_checkbox.checked){
+    end_year.value = end_year_val
+    student_reg_list.style.display = "block";
+    checkEndYear();
+
+}
+else{
+    student_reg_list.style.display = "none";
 }
 
 
-custom_grade_letter.addEventListener(
-    "change", check_grade_form
-);
-
-custom_specialization.addEventListener(
-    "change", check_grade_form
-);
