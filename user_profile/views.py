@@ -45,6 +45,29 @@ class Login(View):
         return render(request, Login.temlpate_name, {'login_form': Login.login_form()})
 
 
+class ProfileSetting(View):
+
+    @staticmethod
+    def saveStudent(student_reg_form_cleaned, grade_form_cleaned, user):
+        grade = models.Grade.getGrade(student_reg_form_cleaned, grade_form_cleaned)
+        student = models.Student.objects.get_or_create(user=user)[0]
+        student.grade = grade
+        student.save()
+
+
+    @staticmethod
+    def getSubjectList(request, teacher_reg_form_cleaned):
+        subjects = list()
+        for item in teacher_reg_form_cleaned.get("subjects"):
+            subjects.append(item)
+        for key in request.POST.keys():
+            if key[:15] == "another_subject":
+                subject_name = request.POST[key].capitalize()
+                if len(subject_name) != 0:
+                    subjects.append(models.Subject.objects.get_or_create(name=subject_name)[0])
+        return subjects
+
+
 
 
 
@@ -86,20 +109,13 @@ class Registration(View):
                     student_reg_form_cleaned = student_reg_form_post.cleaned_data
                     student_reg_form_cleaned['grade'] = request.POST.get('grade')
                     grade_form_cleaned = grade_form_post.cleaned_data
-                    
-                    models.Student.create(user, student_reg_form_cleaned, grade_form_cleaned)
+                    ProfileSetting.saveStudent(student_reg_form_cleaned, grade_form_cleaned, user)
                 else:
                     return HttpResponse("error")
             if request.POST.get('is_teacher') == 'on': 
                 user.is_teacher = True
                 if teacher_reg_form_post.is_valid():
-                    subjects = list()
-                    for item in teacher_reg_form_post.cleaned_data.get("subjects"):
-                        subjects.append(item)
-                    for key in request.POST.keys():
-                        if key[:15] == "another_subject":
-                            subject_name = request.POST[key].capitalize()
-                            subjects.append(models.Subject.objects.get_or_create(name=subject_name)[0])
+                    subjects = ProfileSetting.getSubjectList(request, teacher_reg_form_post.cleaned_data)
                     models.Teacher.create(user, subjects)
                 else:
                     return HttpResponse("error")
@@ -179,24 +195,15 @@ class ChangeData(View):
                     student_reg_form_cleaned = student_reg_form_post.cleaned_data
                     student_reg_form_cleaned['grade'] = request.POST.get('grade')
                     grade_form_cleaned = grade_form_post.cleaned_data
-                    grade = models.Grade.getGrade(student_reg_form_cleaned, grade_form_cleaned)
-                    student = models.Student.objects.get_or_create(user=user)[0]
-                    student.grade = grade
-                    student.save()
+                    ProfileSetting.saveStudent(student_reg_form_cleaned, grade_form_cleaned, user)
+
                 else:
                     return HttpResponse("error")
             else:
                 models.Student.objects.filter(user=user).delete()
             if user.is_teacher == True: 
                 if teacher_reg_form_post.is_valid():
-                    subjects = list()
-                    for item in teacher_reg_form_post.cleaned_data.get("subjects"):
-                        subjects.append(item)
-                    for key in request.POST.keys():
-                        if key[:15] == "another_subject":
-                            subject_name = request.POST[key].capitalize()
-                            if len(subject_name) != 0:
-                                subjects.append(models.Subject.objects.get_or_create(name=subject_name)[0])
+                    subjects = ProfileSetting.getSubjectList(request, teacher_reg_form_post.cleaned_data)
                     teacher = models.Teacher.objects.get_or_create(user=user)[0]
                     teacher.subjects.clear()
                     teacher.subjects.add(*subjects)

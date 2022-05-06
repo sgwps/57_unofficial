@@ -34,7 +34,7 @@ class Specialization(models.Model):
         
 
 class Subject(models.Model):
-    name = models.CharField(max_length=40, null=True)
+    name = models.CharField(max_length=40, null=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -142,7 +142,7 @@ class User(AbstractUser):
 
 class Teacher(models.Model):
     subjects = models.ManyToManyField(Subject)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher', unique=True)
 
     @staticmethod
     def create(user : User, subjects : list):
@@ -156,7 +156,7 @@ class Teacher(models.Model):
 
 
 class Student(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student', unique=True)
     grade = models.ForeignKey(to=Grade, on_delete=models.PROTECT, related_name='student', blank=True, null=True)
 
 
