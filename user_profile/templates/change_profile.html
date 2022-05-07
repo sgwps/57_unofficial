@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Медиа 57:: Личные данные</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+
+
+<body>
+    <div class="header"></div>
+    <div class="content">
+
+        <div id="registration-forms">
+            <form method="post">
+                {% csrf_token %}
+                <ul>
+                    <li>
+                        {{ basic_profile.first_name.label_tag }}
+                        {{ basic_profile.first_name }}
+                    </li>
+                    <li>
+                        {{ basic_profile.last_name.label_tag }}
+                        {{ basic_profile.last_name }}
+                    </li>
+                    <li>
+                        {{ basic_profile.username.label_tag }}
+                        {{ basic_profile.username }}
+                    </li>
+                    <li>
+                        {{ basic_profile.birthday.label_tag }}
+                        {{ basic_profile.birthday }}
+                    </li>
+                    <li>
+                        {{ basic_profile.gender.label_tag }}
+                        {{ basic_profile.gender }}
+                    </li>
+                    <li>
+                        {{ basic_profile.is_student.label_tag }}
+                        {{ basic_profile.is_student }}
+                    </li>
+
+                    <div id="student-registration">
+                        {{ student_reg_form.as_ul }}
+                        <div id="grade_block">
+                        <label for="id_grade">Grade:</label>
+                        <select name="grade" id="id_grade">
+                        </select>
+                        </div>
+                        <div id="custom-grade">
+                            {{ grade_form }}
+                        </div>
+                        </div>
+                    <br>
+
+                    <li>
+                        {{ basic_profile.is_teacher.label_tag }}
+                        {{ basic_profile.is_teacher }}
+                    </li>
+
+                    <div id="teacher-registration">
+                        <ul id="teacher_reg_list">
+                            {{ teacher_reg_form }}
+    
+                            <ul id="other_subjects"></ul>
+                            <button type="button" id="id_another_subject_button">Another subject</button> 
+                            
+                        </ul>
+    
+                    </div>
+                    <br>
+                    <input id="id_submit" type="submit" value="Сохранить">
+                </ul>
+                
+            </form>
+        </div>
+    </div>
+    <div class="footer"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    {% load static %}
+    <script>
+        var end_year_val = parseInt('{{ end_year }}')
+        var grade_val = '{{ grade }}'
+    </script>
+    <script src="{% static 'basic_registration.js' %}"> </script>
+    <script src="{% static 'student_registration.js' %}"> </script>
+    <script src="{% static 'teacher_registration.js' %}"> </script>
+    <script src="{% static 'edit_profile_data.js' %}"></script>
+    
+
+</body>
+</html>
