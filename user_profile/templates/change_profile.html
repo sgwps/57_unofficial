@@ -13,9 +13,13 @@
     <div class="content">
 
         <div id="registration-forms">
-            <form method="post">
+            <form method="post" enctype='multipart/form-data'>
                 {% csrf_token %}
                 <ul>
+                    <li>
+                        {{ basic_profile.profile_pic.label_tag }}
+                        {{ basic_profile.profile_pic }}
+                    </li>
                     <li>
                         {{ basic_profile.first_name.label_tag }}
                         {{ basic_profile.first_name }}

@@ -89,7 +89,7 @@ class Registration(View):
 
 
     def post(self, request, *args, **kwargs):
-        general_reg_form_post = Registration.general_reg_form(request.POST)
+        general_reg_form_post = Registration.general_reg_form(request.POST, request.FILES)
         student_reg_form_post = Registration.student_reg_form(request.POST)
         grade_form_post = Registration.grade_form(request.POST)
         teacher_reg_form_post = Registration.teacher_reg_form(request.POST)
@@ -182,7 +182,7 @@ class ChangeData(View):
 
 
     def post(self, request, *args, **kwargs):
-        general_reg_form_post = ChangeData.general_reg_form(request.POST, instance=request.user)
+        general_reg_form_post = ChangeData.general_reg_form(request.POST, request.FILES, instance=request.user)
         student_reg_form_post = ChangeData.student_reg_form(request.POST)
         grade_form_post = ChangeData.grade_form(request.POST)
         teacher_reg_form_post = ChangeData.teacher_reg_form(request.POST)
