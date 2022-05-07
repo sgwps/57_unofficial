@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>news</title>
+    <style>
+        .not-visible {
+            display: none;
+        }
+    </style>
+</head>
+
+
+{% include 'sample/header.html' %}
+{% include 'sample/footer.html' %}
+
+
+<body>
+
+    <h1>News</h1>
+
+    <hr>
+
+    <div id="articles-box"></div>
+    <div id="spinner-box" class="not-visible">
+        <div class="spinner-border" role="status"></div>
+    </div>
+    <div id="loading-box">
+        <button class="btn btn-primary" id="load-btn">Load more</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        "use strict";
+
+        const articlesBox = document.getElementById('articles-box')
+        const spinnerBox = document.getElementById('spinner-box')
+        const loadBtn = document.getElementById('load-btn')
+        const loadBox = document.getElementById('loading-box')
+        let visible = 1
+
+        const handleGetData = () => {
+            $.ajax({
+                type: 'GET',
+                url: `articles-json/${visible}/`,
+                success: function(response){
+                    let maxSize = response.max
+                    const data = response.data
+                    spinnerBox.classList.remove('not-visible')
+                    setTimeout(()=>{
+                        spinnerBox.classList.add('not-visible')
+                        data.map(post=>{
+                            console.log(post.id)
+                            articlesBox.innerHTML += `
+                            <div class="card bg-dark text-white text-center" style="max-width: 50rem; margin: auto;">
+                                <img src="${post.image}" class="card-img">
+                                <div class="card-body">
+                                    <h5 class="card-title">${post.header}</h5>
+                                    <a href="${post.id}" class="btn btn-primary stretched-link">Go somewhere</a>
+                                </div>
+                            </div>`
+                        })
+                    }, 500)
+                    
+                    if(maxSize){
+                        console.log('done')
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        }
+
+        handleGetData()
+
+        loadBtn.addEventListener('click', ()=>{
+            visible += 1
+            handleGetData()
+        })
+    </script>
+</body>
+</html>

@@ -23,5 +23,7 @@ urlpatterns = [
     path('', main_page, name='Главная'),
     path('quill_test/', QuillView.as_view(), name="Quill"),
     path('article_in_progress', ArtcleWorkAPI.as_view()),
-    path('publish', NewsPublication.as_view())
+    path('publish', NewsPublication.as_view()),
+    path('news', Articles.as_view()),
+    path('articles-json/<int:num_posts>/', ArticlesJsonListView.as_view()),
 ]
