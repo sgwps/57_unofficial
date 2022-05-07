@@ -17,7 +17,7 @@ class BasicRegistrationForm(ModelForm):
     
     class Meta:
         model = models.User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'birthday', 'gender']
+        fields = ['profile_pic', 'first_name', 'last_name', 'username', 'email', 'password', 'birthday', 'gender']
         widgets = {
             'birthday': forms.DateInput(format=('%Y-%m-%d'), 
             attrs={'type': 'date'}),
@@ -29,7 +29,7 @@ class ChangeRegistrationData(ModelForm):
 
     class Meta:
         model = models.User
-        fields = ['first_name', 'last_name', 'username', 'birthday', 'gender', 'is_student', 'is_teacher']
+        fields = ['profile_pic', 'first_name', 'last_name', 'username', 'birthday', 'gender', 'is_student', 'is_teacher']
         widgets = {
             'birthday': forms.DateInput(format=('%Y-%m-%d'), 
             attrs={'type': 'date'}),

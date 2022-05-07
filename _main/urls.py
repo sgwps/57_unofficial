@@ -19,6 +19,8 @@ import user_profile.views
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 import news_creation.views
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 def get_grades(request):
@@ -40,3 +42,5 @@ urlpatterns = [
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
