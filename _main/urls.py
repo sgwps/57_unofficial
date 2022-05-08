@@ -21,6 +21,8 @@ from django.views.generic import TemplateView
 import news_creation.views
 from django.conf.urls.static import static
 from django.conf import settings
+from news.views import *
+from news_creation.views import *
 
 
 def get_grades(request):
@@ -41,6 +43,11 @@ urlpatterns = [
     path('change_user_data', user_profile.views.ChangeData.as_view()),
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
+    path('article_in_progress', ArtcleWorkAPI.as_view()),
+    path('publish', NewsPublication.as_view()),
+    path('news', Articles.as_view()),
+    path('articles-json/<int:num_posts>/', ArticlesJsonListView.as_view()),
+    path('publication', PublicationView.as_view())
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

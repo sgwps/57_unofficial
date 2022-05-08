@@ -8,11 +8,4 @@ import news_creation.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', '_main.settings')
 
-application = ProtocolTypeRouter({
-    'http':get_asgi_application(),
-    'websocket':AuthMiddlewareStack(
-        URLRouter(
-            news_creation.routing.websocket_urlpatterns
-        )
-    )
-})
+application = get_asgi_application()
