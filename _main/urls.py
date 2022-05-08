@@ -26,4 +26,5 @@ urlpatterns = [
     path('publish', NewsPublication.as_view()),
     path('news', Articles.as_view()),
     path('articles-json/<int:num_posts>/', ArticlesJsonListView.as_view()),
+    path('publication', PublicationView.as_view())
 ]

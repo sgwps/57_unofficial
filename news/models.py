@@ -7,7 +7,7 @@ from django.urls import clear_script_prefix
 from user_profile import models as user_models
 
 class Publication(models.Model):
-    content = models.FileField()
+    content = models.TextField()
     is_article = models.BooleanField(editable=False)
     date_created = models.DateTimeField()
 
