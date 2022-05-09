@@ -38,4 +38,5 @@ urlpatterns = [
     path('publish', news_creation.views.NewsPublication.as_view()),
     path('profile_page/', user_profile.views.Profile.as_view()),
     path('logout/', user_profile.views.logout_page, name='logout'),
+    path('change_password/', user_profile.views.change_password, name='change_password'),
 ]
