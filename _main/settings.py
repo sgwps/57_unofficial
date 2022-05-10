@@ -153,10 +153,14 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 """
-EMAIL_FROM_USER = os.environ.get('EMAIL_FROM_USER')
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 587
+EMAIL_PORT = 465
 EMAIL_HOST_USER = 'login@example.com'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'login@example.com'
-EMAIL_USE_TLS = True
+#EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_FROM_USER = os.environ.get('EMAIL_FROM_USER')
+# Используйте .env для настройки os.environ.get(), а также создайте почту либо django enviroment variables
+# и используйте гайд: https://yandex.ru/support/mail/mail-clients/others.html?#smtpsetting
+# Для настройки
