@@ -47,7 +47,10 @@ urlpatterns = [
     path('publish', NewsPublication.as_view()),
     path('news', Articles.as_view()),
     path('articles-json/<int:num_posts>/', ArticlesJsonListView.as_view()),
-    path('publication', PublicationView.as_view())
+    path('publication', PublicationView.as_view()),
+    path('profile_page/', user_profile.views.Profile.as_view()),
+    path('logout/', user_profile.views.logout_page, name='logout'),
+    path('change_password/', user_profile.views.change_password, name='change_password')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
