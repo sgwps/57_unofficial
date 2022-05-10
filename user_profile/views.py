@@ -8,11 +8,19 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from . import models
 from . import forms
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from multiprocessing import context
+from re import template
+import re
+from urllib import request
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class Login(View):
@@ -234,3 +242,37 @@ def CheckEmail(request):
     if models.User.objects.filter(email=email).exists() and email != "":
         result['result'] = False
     return JsonResponse(result)
+
+
+
+class Profile(View):
+    template_profile_page = 'profile_page.html'
+    def get(self, request, *args, **kwargs):
+        ctx = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email
+        }
+        return render(request, Profile.template_profile_page, ctx)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
+
+def logout_page(request):
+    logout(request)
+    messages.add_message(request, messages.INFO, "Вы успешно вышли из аккаунта")
+    return redirect('index')

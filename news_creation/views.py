@@ -68,9 +68,8 @@ class NewsPublication(View):
         form_post = NewsPublication.form(request.POST)
         if form_post.is_valid():
             html_code = BeautifulSoup(json.loads(form_post.cleaned_data['content'])['html'])
-            new_article = NewsModels.Publication(
+            new_article = NewsModels.Article(
                 content = str(html_code),
-                is_article = True,
                 date_created=datetime.now()
             )
             new_article.save()
@@ -82,22 +81,34 @@ class ArticlesJsonListView(View):
     def get(self, *args, **kwargs):
         upper = kwargs.get('num_posts')
         lower = upper - 1
-        articles = list(NewsModels.Publication.objects.values()[lower:upper])
-        articles_size = len(NewsModels.Publication.objects.all())
+        articles = list(NewsModels.Article.objects.values()[lower:upper])
+        articles_size = len(NewsModels.Article.objects.all())
         max_size = True if upper >= articles_size else False
         return JsonResponse({'data': self.parse_articles(articles), 'max': max_size}, safe=False)
 
     def parse_articles(self, articles_list, *args, **kwargs):
         data = []
         for article in articles_list:
-            html_code = article.content
+            html_code = BeautifulSoup(article['content'], features="html.parser")
             article_dict = {}
-            article_dict['header'] = html_code.h1.string
+            try:
+                article_dict['header'] = html_code.h1.string
+            except:
+                pass
             if not article_dict.get('header'):
-                article_dict['header'] = html_code.h2.string
+                try:
+                    article_dict['header'] = html_code.h2.string
+                except:
+                    pass
             if not article_dict.get('header'):
-                article_dict['header'] = html_code.h3.string
-            article_dict['image'] = html_code.find('img')['src']
+                try:
+                    article_dict['header'] = html_code.h3.string
+                except:
+                    pass
+            try:
+                article_dict['image'] = html_code.find('img')['src']
+            except:
+                pass
             article_dict['id'] = article['id']
             data.append(article_dict)
         return data
@@ -110,7 +121,7 @@ class Articles(View):
 
 class PublicationView(View):
     def get(self, request, *args, **kwargs):
-        article = NewsModels.Publication.objects.filter(pk=request.GET.get('id'))[0]
+        article = NewsModels.Article.objects.filter(pk=request.GET.get('id'))[0]
         html_code = article.content
         return render(request, "Publication.html", {'content' : html_code})
 
