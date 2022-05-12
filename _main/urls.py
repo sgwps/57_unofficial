@@ -39,7 +39,7 @@ urlpatterns = [
     path('article_in_progress', news_creation.views.ArtcleWorkAPI.as_view()),
     path('publish', news_creation.views.NewsPublication.as_view()),
     path('moderation_invite', user_profile.views.ModerationInvite.as_view()),
-    path('moderation_invite', user_profile.views.ModerationInvite.as_view()),
+    path('moderation_check', user_profile.views.ModerationCheck.as_view()),
     path('change_user_data', user_profile.views.ChangeData.as_view()),
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
@@ -50,7 +50,9 @@ urlpatterns = [
     path('publication', PublicationView.as_view()),
     path('profile_page/', user_profile.views.Profile.as_view()),
     path('logout/', user_profile.views.logout_page, name='logout'),
-    path('change_password/', user_profile.views.change_password, name='change_password')
+    path('change_password/', user_profile.views.change_password, name='change_password'),
+    path('confirm_email/', user_profile.views.ConfirmEmail.as_view()),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

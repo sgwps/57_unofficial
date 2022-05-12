@@ -139,6 +139,15 @@ class GradesAPI(APIView):
         year = request.GET['year']
         return Response(models.Grade.getGradesByYear(year))
 
+class ConfirmEmail(APIView):
+    def get(self, request):
+        email = request.GET['email']
+        user = models.User.objects.filter(email=email)[0]
+        user.is_confirmed = True
+        user.save()
+        return Response({"done" : True})
+
+
 
 class ModerationInvite(View):
     template_name = 'email_confirm.html'
@@ -150,10 +159,27 @@ class ModerationInvite(View):
     def post(self, request, *args, **kwargs):
         for key in request.POST.keys():
             if key[:13] == 'another_email':
+
                 email = request.POST[key]
-                new_user = models.UnregisterdUser.objects.get_or_create(email=email)
-                new_user.save()
+                if not models.User.objects.filter(email=email).exists(): 
+                    new_user = models.UnregisterdUser.objects.get_or_create(email=email)[0]
+                    new_user.save()
         return redirect('../')
+
+
+class ModerationCheck(View):
+
+    template_name = 'moderation_check.html'
+
+
+    def get(self, request, *args, **kwargs):
+        user_list = models.User.objects.filter(is_confirmed=False)
+        context = {'email_list' : []}
+        for user in user_list:
+            context['email_list'].append(user.email)
+        return render(request, ModerationCheck.template_name, context=context)
+
+
  
 
 class ChangeData(View):
