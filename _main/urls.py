@@ -44,7 +44,6 @@ urlpatterns = [
     path('check_username', user_profile.views.CheckUsename),
     path('check_email', user_profile.views.CheckEmail),
     path('article_in_progress', ArtcleWorkAPI.as_view()),
-    path('publish', NewsPublication.as_view()),
     path('news', Articles.as_view()),
     path('articles-json/<int:num_posts>/', ArticlesJsonListView.as_view()),
     path('publication', PublicationView.as_view()),
