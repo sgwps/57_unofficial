@@ -20,7 +20,14 @@ if (id != null){
 }
 
 function publish(){
+    const id = urlParams.get('id');
     const form = document.getElementById('form');
-    form.action = '/publish';
-    form.submit();
+    var element = document.createElement("INPUT");
+    element.setAttribute("type", "hidden");
+    element.setAttribute("name", "id");
+    element.setAttribute("value", id);
+    form.appendChild(element);
+
+    form.action = '/publish'
+    form.submit()
 }

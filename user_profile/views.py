@@ -200,7 +200,7 @@ class ChangeData(View):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            context_get = ChangeData.context
+            context_get = ChangeData.context.copy()
             context_get['basic_profile'] = forms.ChangeRegistrationData(instance=request.user)
             if request.user.is_student == True:
                 student = models.Student.objects.get(user=request.user)
@@ -301,4 +301,4 @@ def change_password(request):
 def logout_page(request):
     logout(request)
     messages.add_message(request, messages.INFO, "Вы успешно вышли из аккаунта")
-    return redirect('index')
+    return redirect('/')
