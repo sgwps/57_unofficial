@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user_profile',
     'news_creation',
     'django_quill',
+    'messanger',
 ]
 
 MIDDLEWARE = [
