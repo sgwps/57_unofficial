@@ -1,7 +1,7 @@
 import json
 from multiprocessing import get_context
 from re import template
-from django.http import HttpResponse 
+from django.http import HttpResponse, HttpResponseForbidden
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.views import View
@@ -153,7 +153,11 @@ class ModerationInvite(View):
     template_name = 'email_confirm.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, ModerationInvite.template_name)
+        if request.user.is_confirmed == True:
+            return render(request, ModerationInvite.template_name)
+        else:
+            return HttpResponseForbidden()
+
 
 
     def post(self, request, *args, **kwargs):
@@ -173,11 +177,15 @@ class ModerationCheck(View):
 
 
     def get(self, request, *args, **kwargs):
-        user_list = models.User.objects.filter(is_confirmed=False)
-        context = {'email_list' : []}
-        for user in user_list:
-            context['email_list'].append(user.email)
-        return render(request, ModerationCheck.template_name, context=context)
+        if request.user.is_confirmed == True:
+
+            user_list = models.User.objects.filter(is_confirmed=False)
+            context = {'email_list' : []}
+            for user in user_list:
+                context['email_list'].append(user.email)
+            return render(request, ModerationCheck.template_name, context=context)
+        else:
+            return HttpResponseForbidden()
 
 
  
