@@ -50,3 +50,6 @@ class CommentsJsonListView(View):
             'content': comment['content']}
             for comment in comments]
         return JsonResponse({'data': data_comments}, safe=False)
+
+
+        # выбрать комментарии которые написаны раньше кого-то времени, выбрать первые 10 (?)
