@@ -103,23 +103,20 @@ class ArticlesJsonListView(View):
         for article in articles_list:
             html_code = BeautifulSoup(article['content'], features="html.parser")
             article_dict = {}
-            try:
-                article_dict['header'] = html_code.h1.string
-            except:
-                pass
+
+            article_dict['header'] = html_code.h1
             if not article_dict.get('header'):
-                try:
-                    article_dict['header'] = html_code.h2.string
-                except:
-                    pass
+                article_dict['header'] = html_code.h2
             if not article_dict.get('header'):
-                try:
-                    article_dict['header'] = html_code.h3.string
-                except:
-                    pass
+                article_dict['header'] = html_code.h3
+
             try:
                 article_dict['image'] = html_code.find('img')['src']
-            except:
+            except TypeError:
+                pass
+            try:
+                article_dict['header'] = article_dict['header'].string
+            except AttributeError:
                 pass
             article_dict['id'] = article['id']
             data.append(article_dict)
@@ -129,12 +126,3 @@ class ArticlesJsonListView(View):
 class Articles(View):
     def get(self, request, *args, **kwargs):
         return render(request, "news.html")
-
-
-class PublicationView(View):
-    def get(self, request, *args, **kwargs):
-        article = NewsModels.Article.objects.filter(pk=request.GET.get('id'))[0]
-        html_code = article.content
-        return render(request, "Publication.html", {'content' : html_code})
-
-        
