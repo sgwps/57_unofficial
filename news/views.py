@@ -30,7 +30,7 @@ class PublicationView(View):
         if comment_form.is_valid() and request.user.is_authenticated:
             form_data = comment_form.cleaned_data
             comment = Comment(
-                content=form_data,
+                content=form_data["text"],
                 user_id=request.user.id,
                 article=Article.objects.filter(pk=request.GET.get('id'))[0]
             )
@@ -47,6 +47,6 @@ class CommentsJsonListView(View):
         comments = list(Comment.objects.filter(article=Article.objects.get(pk=article_id)).values())[lower:upper][::-1]
         data_comments = [{
             'user': User.objects.get(id=comment['user_id']).get_full_name(),
-            'content': eval(comment['content'])['text']}
+            'content': comment['content']}
             for comment in comments]
         return JsonResponse({'data': data_comments}, safe=False)
