@@ -4,9 +4,10 @@ from multiprocessing import context
 from re import template
 import re
 from urllib import request
-from django.http import HttpResponse 
+from django.http import HttpResponse, HttpResponseRedirect 
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.template import RequestContext
 from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
@@ -141,6 +142,22 @@ def change_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'change_password.html', {
+        'form': form
+    })
+    
+def email_change(request):
+    if request.method == 'POST':
+        form = forms.EmailChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your email was successfully updated!')
+            return redirect('change_email')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.EmailChangeForm(request.user)
+    return render(request, 'email_change.html', {
         'form': form
     })
     
