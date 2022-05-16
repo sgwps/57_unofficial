@@ -51,7 +51,7 @@ urlpatterns = [
     path('logout/', user_profile.views.logout_page, name='logout'),
     path('change_password/', user_profile.views.change_password, name='change_password'),
     path('confirm_email/', user_profile.views.ConfirmEmail.as_view()),
-
+    path('comments-json/<int:article_id>/<int:num_comments>/', CommentsJsonListView.as_view())
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
