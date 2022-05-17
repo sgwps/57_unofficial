@@ -50,7 +50,7 @@ urlpatterns = [
     path('profile_page/', user_profile.views.Profile.as_view()),
     path('logout/', user_profile.views.logout_page, name='logout'),
     path('change_password/', user_profile.views.change_password, name='change_password'),
-    path('change_email/', user_profile.views.email_change, name="change_email"),
+    #path('change_email/', user_profile.views.email_change, name="change_email"),
     path('confirm_email/', user_profile.views.ConfirmEmail.as_view()),
     path('comments-json/<int:article_id>/<int:num_comments>/', CommentsJsonListView.as_view())
 ]

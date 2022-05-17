@@ -310,3 +310,7 @@ def logout_page(request):
     logout(request)
     messages.add_message(request, messages.INFO, "Вы успешно вышли из аккаунта")
     return redirect('/')
+
+
+def change_email(request):
+    pass
