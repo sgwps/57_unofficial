@@ -23,6 +23,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from news.views import *
 from news_creation.views import *
+from search_users.views import *
+
 
 
 def get_grades(request):
@@ -52,7 +54,10 @@ urlpatterns = [
     path('change_password/', user_profile.views.change_password, name='change_password'),
     #path('change_email/', user_profile.views.email_change, name="change_email"),
     path('confirm_email/', user_profile.views.ConfirmEmail.as_view()),
-    path('comments-json/<int:article_id>/<int:num_comments>/', CommentsJsonListView.as_view())
+    path('comments-json/<int:article_id>/<int:num_comments>/', CommentsJsonListView.as_view()),
+    path('user_search', SearchMain.as_view()),
+    path('get_users', UsersAPI.as_view())
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
