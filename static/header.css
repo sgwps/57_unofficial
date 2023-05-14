@@ -1,0 +1,31 @@
+a {
+    font-size: 20px;
+    display: inline-block;
+    padding: 1px 6px;
+
+    /* border: 1px solid gray;
+    border-radius: 10px; */
+}
+
+.header {
+    height: 60px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    font-family: Arial;
+}
+
+.header-element {
+    text-align: center;
+    width: 200px;
+}
+
+.header-element:hover {
+    transform: scale(1.15);
+    transition: 500ms;
+}
+
+.navbar-brand {
+    position: relative;
+}

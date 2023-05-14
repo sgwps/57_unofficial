@@ -1,0 +1,40 @@
+{% load static %}
+<div class="header">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #d8dee9">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="/"><img src="{% static 'osn.svg' %}" width="50" height="40"></a>
+                    </li>
+                    <li class="nav-item header-element">
+                        <a class="nav-link active" href="">Новости</a>
+                    </li>
+                    <li class="nav-item header-element">
+                        <a class="nav-link active" href="">Люди</a>
+                    </li>
+                    <li class="nav-item header-element">
+                        <a class="nav-link active" href="">Вопросы</a>
+                    </li>
+                    <li class="nav-item header-element">
+                        <a class="nav-link active" href="">Чаты</a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item header-element">
+                        <a class="nav-link" href="./profile_page" style="color: #181819">{{ request.user.username }}</a>
+                    </li>
+                    <li class="nav-item header-element">
+                        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item header-element">
+                        <a class="nav-link" href="./login" style="color: #181819">Войти</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

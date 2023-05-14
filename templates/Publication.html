@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{ form.media }}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Publication</title>
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    {% autoescape off %}{{ content }}{% endautoescape %}
+
+    <hr>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" value="Опубликовать">
+    </form>
+
+    <hr>
+
+    <div id="comments-box"></div>
+
+    <div id="loading-box">
+        <button class="btn btn-primary" id="load-btn">Показать ещё</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        "use strict";
+
+        const commentsBox = document.getElementById('comments-box');
+        const loadBtn = document.getElementById('load-btn');
+
+        let params = new URLSearchParams(location.search);
+        let article_id = params.get('id');
+        let visible = 10;
+
+        console.log(commentsBox);
+        console.log(article_id);
+
+        const handleGetData = () => {
+            $.ajax({
+                type: 'GET',
+                url: `comments-json/${article_id}/${visible}/`,
+                success: function(response){
+                    const data = response.data
+                    setTimeout(()=>{
+                        data.map(comment=>{
+                            console.log(comment.id)
+                            commentsBox.innerHTML += `
+                            <div class="comment">
+                                <h5>${comment.user}</h5>
+                                <p>${comment.content}</p>
+                            </div>`
+                        })
+                    }, 500)
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        }
+
+        handleGetData();
+
+        loadBtn.addEventListener('click', ()=>{
+            visible += 10;
+            handleGetData();
+        });
+    </script>
+</body>
+</html>

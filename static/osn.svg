@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <defs>
+  <symbol id="svg_2" viewBox="0 0 4096 4096" x="0px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+   <style type="text/css">.st0{fill:#1D7074;}
+	.st1{fill:#015367;}
+	.st2{fill:#FF5F00;}
+	.st3{display:none;fill:#00295C;}
+	.st4{display:none;fill:#7A7A7A;}
+	.st5{fill:#FF8900;}</style>
+   <polygon class="st0" points="2499.7,1442.3 2499.7,1530.2 2190.4,1854.8 2190.4,1766.1 1863.8,1766.1 1863.8,1442.3 "/>
+   <polygon class="st0" points="2190.9,2281.6 2190.9,2737.5 1863.6,2737.5 2033.9,2500.2 2125.1,2373.3 "/>
+   <polygon class="st1" points="1866.3,1442.3 1866.3,1766.1 1550.4,1766.1 1550.4,1928 1204.7,1928 1204.7,1442.3 "/>
+   <polygon class="st2" points="2499.7,1450.1 2499.7,1913.2 1866.1,2737.1 1866.1,2267.5 1870.2,2262.1 1996.7,2097.7 2121.3,1935.8   2186.1,1851.6 2245.9,1773.9 2495.1,1450.1 "/>
+   <polygon class="st3" points="1550.4,2252.4 1550.4,2254.3 1310.2,2254.3 1204.7,2091.3 1204.7,2089.9 1445.2,2089.9 "/>
+   <polygon class="st1" points="1866.3,2269.4 1866.3,2737.5 1206.4,2737.5 1206.4,2413.7 1552.1,2413.7 1552.1,2241.3 "/>
+   <polygon class="st4" points="1866.3,2263.3 1866.3,2737.5 1864.6,2737.5 1697.3,2479.2 1654.9,2413.7 1551.6,2254.3 1550.4,2252.4   1445.2,2089.9 1204.7,2089.9 1204.7,1928 1649.1,1928 1754,2089.9 1860.4,2254.3 1865,2261.3 "/>
+   <polygon class="st5" points="1866.3,2266.7 1866.3,2731.6 1859.3,2721.1 1551.3,2254.3 1360.8,2254.3 1204.7,1935.2 1204.7,1928   1643.4,1928 1864.6,2263.4 "/>
+  </symbol>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <use id="svg_3" transform="matrix(2.51124, 0, 0, 2.56087, -521.617, -395.937)" x="-1.344733" xlink:href="#svg_2" y="-2.637336"/>
+  <g id="svg_4"/>
+ </g>
+</svg>
